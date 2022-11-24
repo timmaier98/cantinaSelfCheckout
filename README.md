@@ -1,10 +1,10 @@
 # cantinaSelfCheckout
 
-At peak time the mesa at pur university is very crowded. We want to solve this Problem.
+At peak time the mensa at our university is very crowded. We want to solve this Problem.
 
-The goal of the project is to create a self-checkout system for a canteen.\
-You have to slide your tablet with the food under a camera. The system then detects the food
-using a nural network and automatically calculates the cost of all the food on the tablet.
+The goal of the project is to create a self-checkout system for a cantina.\
+You have to slide your tablet with the food under a camera. The system detects the food
+using a neural network and automatically calculates the cost of everything on the tablet.
 
 
 # Setup
@@ -16,12 +16,12 @@ using a nural network and automatically calculates the cost of all the food on t
 # Users 
 
 - Students 
-- Mesa staff
+- Mensa staff
 
 
 # Interfaces
 
-- canteen checkout system
+- cantina checkout system
 
 
 # Objects to detect
@@ -36,11 +36,11 @@ using a nural network and automatically calculates the cost of all the food on t
 
 ### Advantages for the Students
 
-- faster because all checkouts can be open all the time
-- cost savings through lower staff costs can be forward to students
+- faster, because all cashier checkouts can be open all the time
+- cost savings through lower staff costs, which can even be forwarded to students
 - 
 
-### Advantages for the canteen
+### Advantages for the cantina
 
 - cost savings
 - relocation of staff capacities 
