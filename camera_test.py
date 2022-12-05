@@ -10,6 +10,7 @@ import undistort
 import numpy as np
 import sys
 import FPS as FPS
+import utils
 """ 
 gstreamer_pipeline returns a GStreamer pipeline for capturing from the CSI camera
 Flip the image by setting the flip_method (most common values: 0 and 2)
@@ -17,17 +18,18 @@ display_width and display_height determine the size of each camera pane in the w
 Default 1920x1080 displayd in a 1/4 size window
 """
 
+#Defines width  and height of the camera image
+width = 1920
+height = 1080
+# width = 1080
+# height = 720
 
 def gstreamer_pipeline(
     sensor_id=0,
-    capture_width=1920,
-    capture_height=1080,
-    display_width=1920,
-    display_height=1080,
-    #capture_width=1080,
-    #capture_height=720,
-    #display_width=1080,
-    #display_height=720,
+    capture_width=width,
+    capture_height=height,
+    display_width=width,
+    display_height=height,
     framerate=10,
     flip_method=0,
 ):
@@ -52,6 +54,7 @@ def gstreamer_pipeline(
 def show_camera():
     fpsreader = FPS.FPS()
     window_title = "CSI Camera"
+    undistortMap1, undistortMap2 = utils.createMapsFishEyeCalibration(width, height)
     i = 1
 
     # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
@@ -64,7 +67,7 @@ def show_camera():
             while True:
                 ret_val, frame = video_capture.read()
                 if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
-                    frame = undistort.undistort(frame,balance=0.0)
+                    frame = utils.fisheyeUndistort(frame, undistortMap1, undistortMap2)
                     fps, frame = fpsreader.update(img=frame)
                     cv2.imshow(window_title, frame)
                 else:

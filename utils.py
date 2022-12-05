@@ -160,8 +160,8 @@ def writeLinestoCSV(startPointList, endPointList, distanceList):
         for (point1,distance,point2) in zip(startPointList,distanceList,endPointList):
             spamwriter.writerow([point1,round(distance,6),point2])
 
-def createMapsFishEyeCalibration(width, height, balance=0.0, dim2=None, dim3=None):
-    with open('DIM_K_D.npy','rb') as f:
+def createMapsFishEyeCalibration(width, height, path='DIM_K_D.npy', balance=0.0, dim2=None, dim3=None):
+    with open(path,'rb') as f:
         DIM = np.load(f)
         K = np.load(f)
         D = np.load(f)
@@ -177,3 +177,7 @@ def createMapsFishEyeCalibration(width, height, balance=0.0, dim2=None, dim3=Non
     new_K = cv2.fisheye.estimateNewCameraMatrixForUndistortRectify(scaled_K, D, dim2, np.eye(3), balance=balance)
     map1, map2 = cv2.fisheye.initUndistortRectifyMap(scaled_K, D, np.eye(3), new_K, dim3, cv2.CV_16SC2)
     return map1, map2
+
+def fisheyeUndistort(img, map1, map2):
+    undistorted_img = cv2.remap(img, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+    return undistorted_img
