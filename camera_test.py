@@ -6,7 +6,7 @@
 # Drivers for the camera and OpenCV are included in the base image
 
 import cv2
-import undistort
+#import undistort
 import numpy as np
 import sys
 import FPS as FPS
@@ -21,8 +21,7 @@ Default 1920x1080 displayd in a 1/4 size window
 #Defines width  and height of the camera image
 width = 1920
 height = 1080
-# width = 1080
-# height = 720
+
 
 def gstreamer_pipeline(
     sensor_id=0,
@@ -55,6 +54,7 @@ def show_camera():
     fpsreader = FPS.FPS()
     window_title = "CSI Camera"
     undistortMap1, undistortMap2 = utils.createMapsFishEyeCalibration(width, height)
+    print(undistortMap1.shape,undistortMap2.shape)
     i = 1
 
     # To flip the image, modify the flip_method parameter (0 and 2 are the most common)

@@ -165,7 +165,7 @@ def createMapsFishEyeCalibration(width, height, path='DIM_K_D.npy', balance=0.0,
         DIM = np.load(f)
         K = np.load(f)
         D = np.load(f)
-    dim1 = [width, height]  #dim1 is the dimension of input image to un-distort
+    dim1 = (width, height)  #dim1 is the dimension of input image to un-distort
     assert dim1[0]/dim1[1] == DIM[0]/DIM[1], "Image to undistort needs to have same aspect ratio as the ones used in calibration"
     if not dim2:
         dim2 = dim1
@@ -173,7 +173,7 @@ def createMapsFishEyeCalibration(width, height, path='DIM_K_D.npy', balance=0.0,
         dim3 = dim1
     scaled_K = K * dim1[0] / DIM[0]  # The values of K is to scale with image dimension.
     scaled_K[2][2] = 1.0  # Except that K[2][2] is always 1.0
-    
+
     new_K = cv2.fisheye.estimateNewCameraMatrixForUndistortRectify(scaled_K, D, dim2, np.eye(3), balance=balance)
     map1, map2 = cv2.fisheye.initUndistortRectifyMap(scaled_K, D, np.eye(3), new_K, dim3, cv2.CV_16SC2)
     return map1, map2
