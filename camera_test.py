@@ -26,7 +26,7 @@ height = 1080
 def gstreamer_pipeline(
     sensor_id=0,
     capture_width=width,
-    capture_height=height,
+    capture_height=height,  
     display_width=width,
     display_height=height,
     framerate=10,
