@@ -6,6 +6,16 @@ import numpy as np
 from datetime import datetime
 from scipy.spatial import distance as dist
 
+def rez(img, factor):
+    """
+    resizes an image by a given factor
+    :param img: the image to resize
+    :param factor: the factor to resize with
+    :return: the resized image
+    """
+    resized = cv2.resize(img, (0,0), fx=factor, fy=factor, interpolation=cv2.INTER_AREA)
+    return resized
+
 def saveImagesToDirectory(counter,img,directory):
     """
     Saves an image to an given directory using a counter

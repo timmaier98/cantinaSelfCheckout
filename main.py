@@ -72,7 +72,7 @@ def show_camera():
                     #frame = utils.fisheyeUndistort(frame, undistortMap1, undistortMap2)
                     fps, frame = fpsreader.update(img=frame)
                     frame = cv2.cvtColor(frame, 5)
-                    frame = cv2.GaussianBlur(frame, (3,3))
+                    frame = cv2.GaussianBlur(frame, (3,3),sigmaX=1.5, sigmaY=1.5)
 
                     cv2.imshow(window_title, frame)
 
