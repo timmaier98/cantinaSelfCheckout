@@ -1,11 +1,16 @@
-import time
+# MIT License
+# Copyright (c) 2019-2022 JetsonHacks
 
-import numpy as np
+# Using a CSI camera (such as the Raspberry Pi Version 2) connected to a
+# NVIDIA Jetson Nano Developer Kit using OpenCV
+# Drivers for the camera and OpenCV are included in the base image
+
 import cv2
-
+#import undistort
+import numpy as np
+import sys
+import FPS as FPS
 import utils
-from FPS import FPS
-
 """ 
 gstreamer_pipeline returns a GStreamer pipeline for capturing from the CSI camera
 Flip the image by setting the flip_method (most common values: 0 and 2)
@@ -13,15 +18,19 @@ display_width and display_height determine the size of each camera pane in the w
 Default 1920x1080 displayd in a 1/4 size window
 """
 
+#Defines width  and height of the camera image
+width = 1280
+height = 720
+frame_rate = 60
 
-print("Starting camera")
+
 def gstreamer_pipeline(
     sensor_id=0,
-    capture_width=1980,
-    capture_height=1020,
-    display_width=1980,
-    display_height=1020,
-    framerate=30,
+    capture_width=width,
+    capture_height=height,  
+    display_width=width,
+    display_height=height,
+    framerate=frame_rate,
     flip_method=0,
 ):
     return (
@@ -30,7 +39,7 @@ def gstreamer_pipeline(
         "nvvidconv flip-method=%d ! "
         "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
         "videoconvert ! "
-        "video/x-raw, format=(string)BGR ! appsink"
+        "video/x-raw, format=(string)BGR ! appsink max-buffers=1 drop=true"
         % (
             sensor_id,
             capture_width,
@@ -42,36 +51,42 @@ def gstreamer_pipeline(
         )
     )
 
-
-
 def show_camera():
+    fpsreader = FPS.FPS()
     window_title = "CSI Camera"
+    undistortMap1, undistortMap2 = utils.createMapsFishEyeCalibration(width, height)
+    print(undistortMap1.shape,undistortMap2.shape)
+    i = 1
 
     # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
     print(gstreamer_pipeline(flip_method=0))
     video_capture = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
-    time.sleep(0.1)
-    if video_capture.isOpened():
-        try:
-            window_handle = cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
-            while True:
-                ret_val, img = video_capture.read()
+    # gstreamer_pipeline(capture_height=400, capture_width=600, display_height=400, display_width=600)
+    window_handle = cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
 
-                # Check to see if the user closed the window
-                # Under GTK+ (Jetson Default), WND_PROP_VISIBLE does not work correctly. Under Qt it does
-                # GTK - Substitute WND_PROP_AUTOSIZE to detect if window has been closed by user
-                if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
-                    cv2.imshow(window_title, img)
+    while video_capture.isOpened():
+        try: 
+            while True:
+                ret_val, frame = video_capture.read()
+                if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) == 0:
+                    #frame = utils.fisheyeUndistort(frame, undistortMap1, undistortMap2)
+                    fps, frame = fpsreader.update(img=frame)
+                    frame = cv2.cvtColor(frame, 5)
+                    frame = cv2.GaussianBlur(frame, (3,3))
+
+                    cv2.imshow(window_title, frame)
+
+
                 else:
-                    break
+                    break 
                 keyCode = cv2.waitKey(10) & 0xFF
                 # Stop the program on the ESC key or 'q'
                 if keyCode == 27 or keyCode == ord('q'):
                     break
-                # take screenshot on 's'
                 if keyCode == ord('s'):
-                    cv2.imwrite('screenshot.png', img)
-
+                    print('save frame')
+                    cv2.imwrite('images/c'+str(i)+'.png',frame)
+                    i += 1
         finally:
             video_capture.release()
             cv2.destroyAllWindows()
@@ -80,5 +95,5 @@ def show_camera():
 
 
 if __name__ == "__main__":
+    print(cv2.__version__)
     show_camera()
-    print("Test")
