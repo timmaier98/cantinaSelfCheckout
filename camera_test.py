@@ -19,8 +19,9 @@ Default 1920x1080 displayd in a 1/4 size window
 """
 
 #Defines width  and height of the camera image
-width = 1920
-height = 1080
+width = 1280
+height = 720
+frame_rate = 60
 
 
 def gstreamer_pipeline(
@@ -29,7 +30,7 @@ def gstreamer_pipeline(
     capture_height=height,  
     display_width=width,
     display_height=height,
-    framerate=10,
+    framerate=frame_rate,
     flip_method=0,
 ):
     return (
@@ -60,14 +61,14 @@ def show_camera():
     # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
     print(gstreamer_pipeline(flip_method=0))
     video_capture = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
-    gstreamer_pipeline(capture_height=400, capture_width=600, display_height=400, display_width=600)
+    # gstreamer_pipeline(capture_height=400, capture_width=600, display_height=400, display_width=600)
     if video_capture.isOpened():
         try: 
             window_handle = cv2.namedWindow(window_title, cv2.WINDOW_AUTOSIZE)
             while True:
                 ret_val, frame = video_capture.read()
                 if cv2.getWindowProperty(window_title, cv2.WND_PROP_AUTOSIZE) >= 0:
-                    frame = utils.fisheyeUndistort(frame, undistortMap1, undistortMap2)
+                    #frame = utils.fisheyeUndistort(frame, undistortMap1, undistortMap2)
                     fps, frame = fpsreader.update(img=frame)
                     cv2.imshow(window_title, frame)
                 else:
