@@ -20,6 +20,7 @@ class Gui:
         self.app.resizable(False, False)
         self.app.title("cantinaSelfCheckout")
         self.app.config(background=syscolor)  # Hintergrundfarbe des Fensters
+        self.app.attributes("-fullscreen", True)
 
         s = ttk.Style()
         s.configure('Custom.TFrame', background=syscolor)
@@ -30,6 +31,8 @@ class Gui:
         btn = tk.Button(master=self.frame_base, text='Confirm', width=8, height=2,
                          font=Font_Buttons)
         btn.place(relx=0.99, rely=0.99, anchor=tk.SE)
+
+        self.app.bind("<Escape>", lambda e: self.app.destroy())
 
         self.app.mainloop()
 
