@@ -5,7 +5,6 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 import cv2
 import FPS as FPS
-import utils
 
 syscolor = "#031c29"
 syscolorButtons = "#3a3a3a"
@@ -13,10 +12,11 @@ font_buttons = ("Calibri", 36)
 custom_green = "#2FA572"
 custom_red = "#A52F2F"
 
-#Defines width  and height of the camera image
+# Defines width  and height of the camera image
 width = 1280
 height = 720
 frame_rate = 60
+
 
 def gstreamer_pipeline(
     sensor_id=0,
@@ -63,10 +63,10 @@ class Gui:
         self.frame_base = ttk.Frame(master=self.app, style='Custom.TFrame')
         self.frame_base.pack(pady=10, padx=2, fill="both", expand=True)
         
-        photoConfirmButton = PhotoImage(file="path")
+        photoConfirmButton = PhotoImage(file="./gui_images/confirmImage.png")
         
         btn = tk.Button(master=self.frame_base, image=photoConfirmButton)
-        #btn = tk.Button(master=self.frame_base, text='Confirm', width=6, height=2, font=font_buttons, bg=custom_green, activebackground="red", borderwidth=10)
+        # btn = tk.Button(master=self.frame_base, text='Confirm', width=6, height=2, font=font_buttons, bg=custom_green, activebackground="red", borderwidth=10)
         btn.place(relx=0.99, rely=0.99, anchor=tk.SE)
 
         # Video Elements
@@ -89,7 +89,7 @@ class Gui:
 
     def start(self, cam_number=0):
         """ Start the video feed with a given camera (0 is usually built-in webcam). """
-        #self.cam = cv2.VideoCapture(0)
+        # self.cam = cv2.VideoCapture(0)
         self.cam = cv2.VideoCapture("/dev/video3")
         self.cam.set(3, 1280)
         self.cam.set(4, 720)
@@ -103,7 +103,6 @@ class Gui:
             else:
                 # Update the image to tkinter...
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                frame = frame[cropdist:width-cropdist,:]
                 frame = cv2.resize(frame, (self.cam_width, self.cam_height))
                 img_update = ImageTk.PhotoImage(Image.fromarray(frame))
                 self.image_label.configure(image=img_update)
