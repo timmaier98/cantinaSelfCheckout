@@ -35,7 +35,7 @@ gui_slider.create_gui()
 
 def main():
     window_title = "Webcam"
-    network.initialize_model("trained_models/eigene_daten_0812.h5")
+    network.initialize_model("trained_models/own_data_with_none_class_fine_tuned.h5")
     while 1:
 
         radius_1, radius_2, radius_3, radius_4, radius_5, radius_6, x_offset, y_offset = gui_slider.update_dart_trackbars()

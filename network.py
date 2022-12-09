@@ -11,6 +11,7 @@ class_names = ['Cola',
  'Grohe',
  'KitKat',
  'Knoppers',
+ 'Non',
  'Skittles',
  'Snickers',
  'Spezi',
@@ -33,7 +34,7 @@ def get_pos_of_max_p(probabilities):
     if len(probabilities) == len(class_names):
         return class_names[np.argmax(probabilities)]
     else:
-        return "Error"
+        return "Len of classnames doesn't match len of P"
 
 
 def evaluate_image(img):
