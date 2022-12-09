@@ -21,9 +21,9 @@ def updateTrackBar():
 
 
 def update_dart_trackbars():
-    radius_1 = cv2.getTrackbarPos("Circle1", "Dart Settings")
-    radius_2 = cv2.getTrackbarPos("Circle2", "Dart Settings")
-    radius_3 = cv2.getTrackbarPos("Circle3", "Dart Settings")
+    radius_1 = cv2.getTrackbarPos("Min_Dist", "Dart Settings")
+    radius_2 = cv2.getTrackbarPos("Min_Radius", "Dart Settings")
+    radius_3 = cv2.getTrackbarPos("Max_Radius", "Dart Settings")
     radius_4 = cv2.getTrackbarPos("Circle4", "Dart Settings")
     radius_5 = cv2.getTrackbarPos("Circle5", "Dart Settings")
     radius_6 = cv2.getTrackbarPos("Circle6", "Dart Settings")
@@ -80,9 +80,9 @@ def create_gui():
     # cv2.createTrackbar("Circle4", "Dart Settings", 50, 100, empty)
     # cv2.createTrackbar("Circle5", "Dart Settings", 73, 100, empty)
     # cv2.createTrackbar("Circle6", "Dart Settings", 79, 100, empty)
-    cv2.createTrackbar("Circle1", "Dart Settings", 440, 1000, empty)
-    cv2.createTrackbar("Circle2", "Dart Settings", 300, 1000, empty)
-    cv2.createTrackbar("Circle3", "Dart Settings", 300, 1000, empty)
+    cv2.createTrackbar("Min_Dist", "Dart Settings", 440, 1000, empty)
+    cv2.createTrackbar("Min_Radius", "Dart Settings", 300, 1000, empty)
+    cv2.createTrackbar("Max_Radius", "Dart Settings", 300, 1000, empty)
     cv2.createTrackbar("Circle4", "Dart Settings", 410, 1000, empty)
     cv2.createTrackbar("Circle5", "Dart Settings", 94, 200, empty)
     cv2.createTrackbar("Circle6", "Dart Settings", 100, 100, empty)
