@@ -63,9 +63,11 @@ class Gui:
         self.frame_base = ttk.Frame(master=self.app, style='Custom.TFrame')
         self.frame_base.pack(pady=10, padx=2, fill="both", expand=True)
         
-        photoConfirmButton = PhotoImage(file="./gui_images/confirmImage.png")
+        imgButton = Image.open("./gui_images/confirmImage.png")
+        imgButton = imgButton.resize((100,100))
+        photoConfirmButton = ImageTk.PhotoImage(imgButton)
         
-        btn = tk.Button(master=self.frame_base, image=photoConfirmButton)
+        btn = tk.Button(master=self.frame_base, image=photoConfirmButton, bg=syscolor, bd = 0, activebackground=syscolor, highlightthickness = 0)
         # btn = tk.Button(master=self.frame_base, text='Confirm', width=6, height=2, font=font_buttons, bg=custom_green, activebackground="red", borderwidth=10)
         btn.place(relx=0.99, rely=0.99, anchor=tk.SE)
 
