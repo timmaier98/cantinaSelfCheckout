@@ -63,11 +63,11 @@ class Gui:
         self.frame_base = ttk.Frame(master=self.app, style='Custom.TFrame')
         self.frame_base.pack(pady=10, padx=2, fill="both", expand=True)
         
-        imgButton = Image.open("./gui_images/confirmImage.png")
-        imgButton = imgButton.resize((100,100))
-        photoConfirmButton = ImageTk.PhotoImage(imgButton)
+        img_button = Image.open("./gui_images/confirmImage.png")
+        img_button = img_button.resize((100, 100))
+        photo_confirm_button = ImageTk.PhotoImage(img_button)
         
-        btn = tk.Button(master=self.frame_base, image=photoConfirmButton, bg=syscolor, bd = 0, activebackground=syscolor, highlightthickness = 0)
+        btn = tk.Button(master=self.frame_base, image=photo_confirm_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0)
         # btn = tk.Button(master=self.frame_base, text='Confirm', width=6, height=2, font=font_buttons, bg=custom_green, activebackground="red", borderwidth=10)
         btn.place(relx=0.99, rely=0.99, anchor=tk.SE)
 
@@ -82,42 +82,33 @@ class Gui:
         self.image_label = tk.Label(self.frame_base, height=self.cam_height-2*self.cropdistY, width=self.cam_width-2*self.cropdistX, background=syscolor)
         self.image_label.place(relx=0.01, rely=0.01, anchor='nw')
 
-        # start_btn = tk.Button(self.app, text="Start", command=self.start, height=5, width=8)
-        # start_btn.place(relx=0.99, rely=0.3, anchor='se')
-        # stop_btn = tk.Button(master=self.frame_base, text='Stop', width=8, height=2, font=font_buttons, command=self.stop)
-        # stop_btn.place(relx=0.99, rely=0.5, anchor='se')
-
-        #self.start(cam_number = 0)
-        self.startCSI()
+        # self.start(cam_number="/dev/video3")
+        self.start_csi()
         self.app.mainloop()
 
     def start(self, cam_number=0):
         """ Start the video feed with a given camera (0 is usually built-in webcam). """
-        # self.cam = cv2.VideoCapture(0)
-        self.cam = cv2.VideoCapture("/dev/video3")
+        self.cam = cv2.VideoCapture(cam_number)
         self.cam.set(3, 1280)
         self.cam.set(4, 720)
 
         while True:
             ret, frame = self.cam.read()
-
-            if not ret:
-                print("Failed to grab frame from camera:", cam_number)
-                # break
-            else:
-                # Update the image to tkinter...
+            if ret:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 frame = cv2.resize(frame, (self.cam_width, self.cam_height))
                 img_update = ImageTk.PhotoImage(Image.fromarray(frame))
                 self.image_label.configure(image=img_update)
                 self.image_label.update()
+            else:
+                print("Failed to grab frame from camera:", cam_number)
 
-    def startCSI(self):
-        fpsreader = FPS.FPS()
+    def start_csi(self):
+        fps_reader = FPS.FPS()
         # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
         print(gstreamer_pipeline(flip_method=0))
         video_capture = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
-        # gstreamer_pipeline(capture_height=400, capture_width=600, display_height=400, display_width=600)
+
         if video_capture.isOpened():
             try: 
                 while True:
@@ -125,13 +116,13 @@ class Gui:
                     if ret_val: 
                         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                         frame = cv2.resize(frame, (self.cam_width, self.cam_height))
-                        frame = frame[self.cropdistY:self.cam_height-self.cropdistY,self.cropdistX:self.cam_width-self.cropdistX]
-                        fps, frame = fpsreader.update(img=frame)
+                        frame = frame[self.cropdistY:self.cam_height-self.cropdistY, self.cropdistX:self.cam_width-self.cropdistX]
+                        fps, frame = fps_reader.update(img=frame)
                         img_update = ImageTk.PhotoImage(Image.fromarray(frame))
                         self.image_label.configure(image=img_update)
                         self.image_label.update()
                     else:
-                        print("no frame")
+                        print("Failed to grab frame from CSI camera.")
             finally:
                 video_capture.release()
                 cv2.destroyAllWindows()
@@ -139,7 +130,7 @@ class Gui:
             print("Error: Unable to open camera")
 
     def stop(self):
-        """ Stop the video feed and destroy all windows. """
+        """ Stop the video feed and destroy all OpenCV windows. """
         self.cam.release()
         cv2.destroyAllWindows()
         print("Stopped!")
