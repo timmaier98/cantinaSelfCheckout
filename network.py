@@ -7,16 +7,18 @@ import tensorflow as tf
 import cv2
 
 
-class_names = ['Cola',
- 'Grohe',
- 'KitKat',
- 'Knoppers',
- 'Non',
- 'Skittles',
- 'Snickers',
- 'Spezi',
- 'Sprite',
- 'Studentenfutter']
+# class_names = ['Cola',
+#  'Grohe',
+#  'KitKat',
+#  'Knoppers',
+#  'Non',
+#  'Skittles',
+#  'Snickers',
+#  'Spezi',
+#  'Sprite',
+#  'Studentenfutter']
+
+class_names = ['Non', 'NudelnBrokkoli', 'NudelnTomate', 'PizzaPesto', 'PizzaVerdure']
 
 model : keras.engine.functional.Functional = None
 
