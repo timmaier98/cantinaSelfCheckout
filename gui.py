@@ -57,13 +57,15 @@ class Gui:
         # self.app.resizable(False, False)
         self.app.title("cantinaSelfCheckout")
         self.app.config(background=syscolor)  # background color of the window
-        #self.app.attributes("-fullscreen", True)
+        # self.app.attributes("-fullscreen", True)
 
         self.app.bind("<Escape>", lambda e: self.app.destroy())
-        self.app.bind("<s>", self.takeSamplePictures)
+        self.app.bind("<s>", self.take_sample_pictures)
 
         s = ttk.Style()
         s.configure('Custom.TFrame', background=syscolor)
+
+        self.path = "/home/jetson/Desktop/cantinaSelfCheckout/Trainingsbilder/newMeal"
 
         self.frame_base = ttk.Frame(master=self.app, style='Custom.TFrame')
         self.frame_base.pack(pady=10, padx=2, fill="both", expand=True)
@@ -80,14 +82,14 @@ class Gui:
         repeat_button = tk.Button(master=self.frame_base, image=photo_repeat_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0)
         repeat_button.place(relx=0.87, rely=0.99, anchor=tk.SE)
 
-        btnPics = tk.Button(master=self.frame_base, text='Choose directory', width=12, height=1, font=font_buttons, bg=custom_orange, 
-                            activebackground=custom_orange_pressed, borderwidth=0, command=self.chooseDirectory)
-        btnPics.place(relx=0.97, rely=0.02, anchor=tk.NE)
+        btn_pics = tk.Button(master=self.frame_base, text='Choose directory', width=12, height=1, font=font_buttons, bg=custom_orange,
+                            activebackground=custom_orange_pressed, borderwidth=0, command=self.choose_directory)
+        btn_pics.place(relx=0.97, rely=0.02, anchor=tk.NE)
         
         self.dirVar = StringVar()
-        self.dirVar.set("cantinaSelfCheckout/images")
-        dirTextBox = tk.Label(master=self.frame_base, textvariable=self.dirVar, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
-        dirTextBox.place(relx=0.97, rely=0.1, anchor=tk.NE)
+        self.dirVar.set("cantinaSelfCheckout/Trainingsbilder/newMeal")
+        dir_text_box = tk.Label(master=self.frame_base, textvariable=self.dirVar, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
+        dir_text_box.place(relx=0.97, rely=0.1, anchor=tk.NE)
         
         # Video Elements
         self.cam = None
@@ -104,14 +106,15 @@ class Gui:
         self.start_csi()
         self.app.mainloop()
     
-    def takeSamplePictures(self, *event):
+    def take_sample_pictures(self, *event):
         print('Saving Frame')
-        cv2.imwrite('images/c'+str(self.index)+'.png', self.globalFrame)
+        cv2.imwrite(self.path + "/c" +str(self.index)+'.png', self.globalFrame)
         self.index += 1
 
-    def chooseDirectory(self):
+    def choose_directory(self):
         self.index = 0 
         path = filedialog.askdirectory(initialdir="/home/jetson/desktop/cantinaSelfCheckout", title="Choose a directory")
+        self.path = path
         path = path[20:]
         self.dirVar.set(path)
         print(self.dirVar)
@@ -122,11 +125,15 @@ class Gui:
         self.cam.set(3, 1280)
         self.cam.set(4, 720)
 
+        fps_reader = FPS.FPS()
         while True:
             ret, frame = self.cam.read()
             if ret:
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 frame = cv2.resize(frame, (self.cam_width, self.cam_height))
+                frame = frame[self.cropdistY:self.cam_height - self.cropdistY, self.cropdistX:self.cam_width - self.cropdistX]
+                self.globalFrame = frame
+                fps, frame = fps_reader.update(img=frame)
                 img_update = ImageTk.PhotoImage(Image.fromarray(frame))
                 self.image_label.configure(image=img_update)
                 self.image_label.update()
