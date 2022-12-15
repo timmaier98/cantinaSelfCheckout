@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
+from tkinter import filedialog
 
 from PIL import Image, ImageTk
 import cv2
@@ -8,8 +9,9 @@ import FPS as FPS
 
 syscolor = "#031c29"
 syscolorButtons = "#3a3a3a"
-font_buttons = ("Calibri", 36)
+font_buttons = ("Calibri", 16)
 custom_green = "#2FA572"
+custom_green_pressed = "#106A43"
 custom_red = "#A52F2F"
 
 # Defines width  and height of the camera image
@@ -53,9 +55,10 @@ class Gui:
         # self.app.resizable(False, False)
         self.app.title("cantinaSelfCheckout")
         self.app.config(background=syscolor)  # background color of the window
-        self.app.attributes("-fullscreen", True)
+        #self.app.attributes("-fullscreen", True)
 
         self.app.bind("<Escape>", lambda e: self.app.destroy())
+        self.app.bind("<s>", self.takeSamplePictures)
 
         s = ttk.Style()
         s.configure('Custom.TFrame', background=syscolor)
@@ -71,8 +74,15 @@ class Gui:
         # btn = tk.Button(master=self.frame_base, text='Confirm', width=6, height=2, font=font_buttons, bg=custom_green, activebackground="red", borderwidth=10)
         btn.place(relx=0.99, rely=0.99, anchor=tk.SE)
 
-        btnPics = tk.Button(master=self.frame_base, text='Take Pictures', width=6, height=2, font=font_buttons, bg=custom_green, activebackground="red", borderwidth=0)
-        btnPics.place(relx=0.99, rely=0.1, anchor=tk.SE)
+        btnPics = tk.Button(master=self.frame_base, text='Choose directory', width=12, height=1, font=font_buttons, bg=custom_green, 
+                            activebackground=custom_green_pressed, borderwidth=0, command=self.chooseDirectory)
+        btnPics.place(relx=0.97, rely=0.02, anchor=tk.NE)
+        
+        self.dirVar = StringVar()
+        self.dirVar.set("cantinaSelfCheckout/images")
+        dirTextBox = tk.Label(master=self.frame_base, textvariable=self.dirVar, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
+        dirTextBox.place(relx=0.97, rely=0.1, anchor=tk.NE)
+        
         # Video Elements
         self.cam = None
         self.cam_height = 680
@@ -81,10 +91,24 @@ class Gui:
         self.cropdistY = 40
         self.image_label = tk.Label(self.frame_base, height=self.cam_height-2*self.cropdistY, width=self.cam_width-2*self.cropdistX, background=syscolor)
         self.image_label.place(relx=0.01, rely=0.01, anchor='nw')
+        self.globalFrame = None
+        self.index = 0
 
         # self.start(cam_number="/dev/video3")
         self.start_csi()
         self.app.mainloop()
+    
+    def takeSamplePictures(self, *event):
+        print('Saving Frame')
+        cv2.imwrite('images/c'+str(self.index)+'.png', self.globalFrame)
+        self.index += 1
+
+    def chooseDirectory(self):
+        self.index = 0 
+        path = filedialog.askdirectory(initialdir="/home/jetson/desktop/cantinaSelfCheckout", title="Choose a directory")
+        path = path[20:]
+        self.dirVar.set(path)
+        print(self.dirVar)
 
     def start(self, cam_number=0):
         """ Start the video feed with a given camera (0 is usually built-in webcam). """
@@ -117,6 +141,7 @@ class Gui:
                         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                         frame = cv2.resize(frame, (self.cam_width, self.cam_height))
                         frame = frame[self.cropdistY:self.cam_height-self.cropdistY, self.cropdistX:self.cam_width-self.cropdistX]
+                        self.globalFrame = frame
                         fps, frame = fps_reader.update(img=frame)
                         img_update = ImageTk.PhotoImage(Image.fromarray(frame))
                         self.image_label.configure(image=img_update)
