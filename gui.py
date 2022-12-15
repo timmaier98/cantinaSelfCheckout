@@ -65,6 +65,8 @@ class Gui:
         s = ttk.Style()
         s.configure('Custom.TFrame', background=syscolor)
 
+        self.path = "/home/jetson/Desktop/cantinaSelfCheckout/Trainingsbilder/newMeal"
+
         self.frame_base = ttk.Frame(master=self.app, style='Custom.TFrame')
         self.frame_base.pack(pady=10, padx=2, fill="both", expand=True)
         
@@ -85,7 +87,7 @@ class Gui:
         btn_pics.place(relx=0.97, rely=0.02, anchor=tk.NE)
         
         self.dirVar = StringVar()
-        self.dirVar.set("cantinaSelfCheckout/images")
+        self.dirVar.set("cantinaSelfCheckout/Trainingsbilder/newMeal")
         dir_text_box = tk.Label(master=self.frame_base, textvariable=self.dirVar, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
         dir_text_box.place(relx=0.97, rely=0.1, anchor=tk.NE)
         
@@ -106,12 +108,13 @@ class Gui:
     
     def take_sample_pictures(self, *event):
         print('Saving Frame')
-        cv2.imwrite('images/c'+str(self.index)+'.png', self.globalFrame)
+        cv2.imwrite(self.path + "/c" +str(self.index)+'.png', self.globalFrame)
         self.index += 1
 
     def choose_directory(self):
         self.index = 0 
         path = filedialog.askdirectory(initialdir="/home/jetson/desktop/cantinaSelfCheckout", title="Choose a directory")
+        self.path = path
         path = path[20:]
         self.dirVar.set(path)
         print(self.dirVar)
