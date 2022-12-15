@@ -71,6 +71,8 @@ class Gui:
         # btn = tk.Button(master=self.frame_base, text='Confirm', width=6, height=2, font=font_buttons, bg=custom_green, activebackground="red", borderwidth=10)
         btn.place(relx=0.99, rely=0.99, anchor=tk.SE)
 
+        btnPics = tk.Button(master=self.frame_base, text='Take Pictures', width=6, height=2, font=font_buttons, bg=custom_green, activebackground="red", borderwidth=0)
+        btnPics.place(relx=0.99, rely=0.1, anchor=tk.SE)
         # Video Elements
         self.cam = None
         self.cam_height = 680
