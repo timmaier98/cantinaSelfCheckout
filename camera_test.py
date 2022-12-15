@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 import sys
 import FPS as FPS
-import utils
+import utils_own
 """ 
 gstreamer_pipeline returns a GStreamer pipeline for capturing from the CSI camera
 Flip the image by setting the flip_method (most common values: 0 and 2)

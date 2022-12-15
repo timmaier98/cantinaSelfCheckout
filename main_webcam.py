@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 import sys
 import FPS as FPS
-import utils
+import utils_own
 import gui_slider
 import network
 """ 
@@ -68,8 +68,6 @@ def main():
         cv2.imshow(window_title, utils.rez(frame,0.5))
         print(frame.shape)
         cv2.waitKey(1)
-
-
 
 if __name__ == "__main__":
     print(cv2.__version__)
