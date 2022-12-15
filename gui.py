@@ -12,6 +12,8 @@ syscolorButtons = "#3a3a3a"
 font_buttons = ("Calibri", 16)
 custom_green = "#2FA572"
 custom_green_pressed = "#106A43"
+custom_orange = "#e67627"
+custom_orange_pressed = "#c26421"
 custom_red = "#A52F2F"
 
 # Defines width  and height of the camera image
@@ -66,16 +68,20 @@ class Gui:
         self.frame_base = ttk.Frame(master=self.app, style='Custom.TFrame')
         self.frame_base.pack(pady=10, padx=2, fill="both", expand=True)
         
-        img_button = Image.open("./gui_images/confirmImage.png")
-        img_button = img_button.resize((100, 100))
-        photo_confirm_button = ImageTk.PhotoImage(img_button)
-        
-        btn = tk.Button(master=self.frame_base, image=photo_confirm_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0)
-        # btn = tk.Button(master=self.frame_base, text='Confirm', width=6, height=2, font=font_buttons, bg=custom_green, activebackground="red", borderwidth=10)
-        btn.place(relx=0.99, rely=0.99, anchor=tk.SE)
+        confirm_img = Image.open("./gui_images/confirmImage.png")
+        confirm_img = confirm_img.resize((100, 100))
+        photo_confirm_button = ImageTk.PhotoImage(confirm_img)
+        confirm_button = tk.Button(master=self.frame_base, image=photo_confirm_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0)
+        confirm_button.place(relx=0.99, rely=0.99, anchor=tk.SE)
 
-        btnPics = tk.Button(master=self.frame_base, text='Choose directory', width=12, height=1, font=font_buttons, bg=custom_green, 
-                            activebackground=custom_green_pressed, borderwidth=0, command=self.chooseDirectory)
+        repeat_img = Image.open("./gui_images/repeat.png")
+        repeat_img = repeat_img.resize((105, 105))
+        photo_repeat_button = ImageTk.PhotoImage(repeat_img)
+        repeat_button = tk.Button(master=self.frame_base, image=photo_repeat_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0)
+        repeat_button.place(relx=0.87, rely=0.99, anchor=tk.SE)
+
+        btnPics = tk.Button(master=self.frame_base, text='Choose directory', width=12, height=1, font=font_buttons, bg=custom_orange, 
+                            activebackground=custom_orange_pressed, borderwidth=0, command=self.chooseDirectory)
         btnPics.place(relx=0.97, rely=0.02, anchor=tk.NE)
         
         self.dirVar = StringVar()
