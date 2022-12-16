@@ -103,10 +103,10 @@ def create_gui():
     # cv2.createTrackbar("Y_Offset", "Dart Settings", 0, 100, empty)
     # cv2.setTrackbarMin("Y_Offset", "Dart Settings", -100)
     # Einstellungen für Segmentation_Rest
-    cv2.createTrackbar("Min_Dist", "Dart Settings", 1193, 4000, empty)
+    cv2.createTrackbar("Min_Dist", "Dart Settings", 1600, 4000, empty)
     cv2.createTrackbar("Min_Radius", "Dart Settings", 3500, 4000, empty)
     cv2.createTrackbar("Max_Radius", "Dart Settings", 8, 1000, empty)
-    cv2.createTrackbar("Circle4", "Dart Settings", 190, 1000, empty)
+    cv2.createTrackbar("Circle4", "Dart Settings", 85, 1000, empty)
     cv2.createTrackbar("Circle5", "Dart Settings", 200, 200, empty)
     cv2.createTrackbar("Circle6", "Dart Settings", 100, 100, empty)
     cv2.createTrackbar("X_Offset", "Dart Settings", 0, 100, empty)

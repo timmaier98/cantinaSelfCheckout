@@ -42,6 +42,7 @@ for folder in os.listdir(path):
         for filename in os.listdir(clas_folder):
             # rename files into class name + number
             try:
+                #check what is the last number in the folder inf format class_name + number
                 os.rename(os.path.join(clas_folder, filename), os.path.join(clas_folder, folder + str(j) + ".png"))
                 filename = folder + str(j) + ".png"
             except FileExistsError:
@@ -80,7 +81,7 @@ for folder in os.listdir(path):
                 peri = cv2.arcLength(cnt, True)
                 approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
                 x, y, w, h = cv2.boundingRect(approx)
-                print(x, y, w, h)
+                # print(x, y, w, h)
                 cv2.rectangle(img_original, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(img_original, "Points: " + str(len(approx)), (x + w + 20, y + 20), cv2.FONT_HERSHEY_COMPLEX, 0.7,
                             (0, 255, 0), 2)
@@ -88,6 +89,7 @@ for folder in os.listdir(path):
                             (0, 255, 0), 2)
                 # create a txt file with the same name as the image and write the coordinates of the bounding box in format x,y,w,h relative to the image size
                 with open(os.path.join(path, filename[:-4] + ".txt"), "w") as f:
+                    #https://github.com/ultralytics/yolov5/issues/8246
                     # remove offset from image
                     x = x + Y_CROP
                     y = y + X_CROP
@@ -95,6 +97,9 @@ for folder in os.listdir(path):
                     scaled_Y = y/IMAGE_HEIGHT
                     scaled_W = w/IMAGE_WIDTH
                     scaled_H = h/IMAGE_HEIGHT
+                    # move x and y to the center of the bounding box
+                    scaled_X = scaled_X + scaled_W/2
+                    scaled_Y = scaled_Y + scaled_H/2
                     cv2.rectangle(img_full, (x, y), (x + w, y + h), (0, 255, 0), 2)
                     cv2.imshow("full", cv2.resize(img_full, (0, 0), fx=0.5, fy=0.5))
                     cv2.waitKey(1)
@@ -104,7 +109,7 @@ for folder in os.listdir(path):
             cv2.imshow("Result", cv2.resize(img_original,(0, 0), fx=0.8, fy=0.8))
             # show images side by side
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
 
 # create a yaml file with the following format:
@@ -124,8 +129,8 @@ with open(os.path.join(path, "data.yaml"), "w") as f:
     for key in class_dict:
         f.write(f"- {key}\n")
     f.write(f"nc: {len(class_dict)}\n")
-    f.write("train: ds2-1/train/images\n")
-    f.write("val: ds2-1/valid/images\n")
+    f.write("train: train/images\n")
+    f.write("val: valid/images\n")
     f.close()
 
 

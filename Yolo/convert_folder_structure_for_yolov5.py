@@ -12,7 +12,11 @@ if not os.path.exists(new_dir):
 
 # First run segmentation.py to get the images and the labels.txt
 # Then run this script to get the folder structure for YoloV5
+# When zipping the folder structure for YoloV5, make sure to have en folder in a folder
+
 def crate_yolo_folder_structure(dir, new_dir):
+    # copy data.yaml
+    shutil.copy(os.path.join(dir, "data.yaml"), os.path.join(new_dir, "data.yaml"))
     # crate train and valid folder
     train_dir = os.path.join(new_dir, "train")
     valid_dir = os.path.join(new_dir, "valid")
@@ -58,19 +62,19 @@ def crate_yolo_folder_structure(dir, new_dir):
             if not os.path.exists(os.path.join(dir, label_file)):   # check if label file exists
                 continue
             if random.random() < 0.2:
-                print("Would move file: " + os.path.join(train_folder, file) + " to " + os.path.join(valid_images_dir, file))
+                # print("Would move file: " + os.path.join(train_folder, file) + " to " + os.path.join(valid_images_dir, file))
                 shutil.copy(os.path.join(train_folder, file), valid_images_dir)
                 # copy labels
                 # take name of file and replace .png with .txt
-                print("Would move file: " + os.path.join(dir, label_file) + " to " + os.path.join(valid_labels_dir, label_file))
+                # print("Would move file: " + os.path.join(dir, label_file) + " to " + os.path.join(valid_labels_dir, label_file))
                 shutil.copy(os.path.join(dir, label_file), valid_labels_dir)
             else:
-                print("Would move file: " + os.path.join(train_folder, file) + " to " + os.path.join(train_images_dir, file))
+                # print("Would move file: " + os.path.join(train_folder, file) + " to " + os.path.join(train_images_dir, file))
                 shutil.copy(os.path.join(train_folder, file), train_images_dir)
                 # copy labels
                 # take name of file and replace .png with .txt
-                print("Would move file: " + os.path.join(dir, label_file) + " to " + os.path.join(train_labels_dir,
-                                                                                                  label_file))
+                # print("Would move file: " + os.path.join(dir, label_file) + " to " + os.path.join(train_labels_dir,
+                #                                                                                   label_file))
                 shutil.copy(os.path.join(dir, label_file), train_labels_dir)
 
 
