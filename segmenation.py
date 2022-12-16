@@ -95,9 +95,9 @@ for folder in os.listdir(path):
                     scaled_Y = y/IMAGE_HEIGHT
                     scaled_W = w/IMAGE_WIDTH
                     scaled_H = h/IMAGE_HEIGHT
-                    # cv2.rectangle(img_full, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                    # cv2.imshow("full", cv2.resize(img_full, (0, 0), fx=0.5, fy=0.5))
-                    # cv2.waitKey(1)
+                    cv2.rectangle(img_full, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                    cv2.imshow("full", cv2.resize(img_full, (0, 0), fx=0.5, fy=0.5))
+                    cv2.waitKey(1)
                     f.write(f"{class_dict[folder]} {scaled_X} {scaled_Y} {scaled_W} {scaled_H}")
                     f.close()
 
@@ -116,13 +116,6 @@ for folder in os.listdir(path):
 # - Snickers
 # - Spezi
 # nc: 6
-# roboflow:
-#   license: CC BY 4.0
-#   project: ds2-szq20
-#   url: https://universe.roboflow.com/ds2-z0dig/ds2-szq20/dataset/1
-#   version: 1
-#   workspace: ds2-z0dig
-# test: ../test/images
 # train: ds2-1/train/images
 # val: ds2-1/valid/images
 
@@ -131,13 +124,6 @@ with open(os.path.join(path, "data.yaml"), "w") as f:
     for key in class_dict:
         f.write(f"- {key}\n")
     f.write(f"nc: {len(class_dict)}\n")
-    f.write("roboflow:\n")
-    f.write("  license: CC BY 4.0\n")
-    f.write("  project: ds2-szq20\n")
-    f.write("  url: https://universe.roboflow.com/ds2-z0dig/ds2-szq20/dataset/1\n")
-    f.write("  version: 1\n")
-    f.write("  workspace: ds2-z0dig\n")
-    f.write("test: ../test/images\n")
     f.write("train: ds2-1/train/images\n")
     f.write("val: ds2-1/valid/images\n")
     f.close()
