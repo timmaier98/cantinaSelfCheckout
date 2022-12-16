@@ -18,7 +18,21 @@ import cv2
 #  'Sprite',
 #  'Studentenfutter']
 
-class_names = ['Non', 'NudelnBrokkoli', 'NudelnTomate', 'PizzaPesto', 'PizzaVerdure']
+class_names = ['Backfisch',
+ 'EintopfMWurst',
+ 'Kaiserschmarrn',
+ 'Kartoffelsalat',
+ 'Maultaschen',
+ 'Non',
+ 'NudelnBrokkoli',
+ 'NudelnTomate',
+ 'PizzaPesto',
+ 'PizzaVerdure',
+ 'ReisMitTomate',
+ 'Sauerkischpudding',
+ 'Schokopudding',
+ 'SoleroPudding',
+ 'Spinat']
 
 model : keras.engine.functional.Functional = None
 

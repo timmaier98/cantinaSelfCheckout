@@ -1,4 +1,6 @@
 import os
+import random
+import shutil
 
 import cv2
 import numpy as np
@@ -12,8 +14,11 @@ import countour_detection
 # cap.set(3, 1280)
 # cap.set(4, 720)
 
-X_CROP = 70
-Y_CROP = 200
+X_CROP = 50
+Y_CROP = 150
+
+# X_CROP = 0.05
+# Y_CROP = 0
 
 
 
@@ -28,7 +33,7 @@ class_number = 0
 
 for folder in os.listdir(path):
     # exclude files
-    if "." not in folder:
+    if "." not in folder and folder != "Non":
         print("Now in Folder:", folder)
         class_dict[folder] = class_number
         print(class_dict)
@@ -39,15 +44,21 @@ for folder in os.listdir(path):
             # rename files into class name + number
             try:
                 os.rename(os.path.join(clas_folder, filename), os.path.join(clas_folder, folder + str(j) + ".png"))
+                filename = folder + str(j) + ".png"
             except FileExistsError:
                 pass
             j += 1
-            print(filename)
+            print(os.path.join(clas_folder, filename))
             img = cv2.imread(os.path.join(clas_folder, filename))
+            img = cv2.resize(img, (1280, 720))
+            # cv2.imshow("Image_original", img)
             img_full = img.copy()
             IMAGE_WIDTH = img.shape[1]
             IMAGE_HEIGHT = img.shape[0]
             # crop 100 px from top bottom left and right
+            # set x_crop and y_crop to 10% of image width and height
+            # X_CROP = int(IMAGE_WIDTH * X_CROP)
+            # Y_CROP = int(IMAGE_HEIGHT * Y_CROP)
             img = img[X_CROP:-X_CROP, Y_CROP:-Y_CROP]
             img_original = img.copy()
             # if succes:
@@ -91,7 +102,7 @@ for folder in os.listdir(path):
                     f.write(f"{class_dict[folder]} {scaled_X} {scaled_Y} {scaled_W} {scaled_H}")
                     f.close()
 
-            cv2.imshow("Result", cv2.resize(img_original,(0, 0), fx=0.5, fy=0.5))
+            cv2.imshow("Result", cv2.resize(img_original,(0, 0), fx=0.8, fy=0.8))
             # show images side by side
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -131,3 +142,5 @@ with open(os.path.join(path, "data.yaml"), "w") as f:
     f.write("train: ds2-1/train/images\n")
     f.write("val: ds2-1/valid/images\n")
     f.close()
+
+
