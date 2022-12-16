@@ -6,7 +6,6 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import gui_slider
-import countour_detection
 
 # cap = cv2.VideoCapture(2)
 # use folder of images instead of webcam
