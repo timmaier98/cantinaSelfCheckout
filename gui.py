@@ -165,8 +165,11 @@ class Gui:
                         self.globalFrame = frame
                         results = model(frame)
                         results.print()
-                        results.render()
-                        fps, frame = fps_reader.update(img=frame)
+                        frame_w_bb = results.render()
+                        frame = frame_w_bb[0]
+                        cv2.imshow("Name", frame)
+                        cv2.waitKey(1)
+                        #fps, frame = fps_reader.update(img=frame)
                         img_update = ImageTk.PhotoImage(Image.fromarray(frame))
                         self.image_label.configure(image=img_update)
                         self.image_label.update()
