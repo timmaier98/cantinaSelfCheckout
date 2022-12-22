@@ -10,7 +10,7 @@ import cv2
 # # load the weights from the trained model
 # # model.load_state_dict(torch.load("trained_models/yolov5s.pt", map_location=torch.device('cpu'))['model'].float().state_dict(), strict=False)
 # # model.load_state_dict(torch.load('C:\\Users\\larsg\\PycharmProjects\\cantinaSelfCheckout\\Yolo\\runs_Tim\\train\\exp5\\weights\\best.pt'))
-cap = cv2.VideoCapture(2)
+cap = cv2.VideoCapture(0)
 cap.set(3, 1280)
 cap.set(4, 720)
 

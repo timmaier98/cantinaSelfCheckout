@@ -91,11 +91,22 @@ def create_gui():
     # cv2.setTrackbarMin("X_Offset", "Dart Settings", -100)
     # cv2.createTrackbar("Y_Offset", "Dart Settings", 0, 100, empty)
     # cv2.setTrackbarMin("Y_Offset", "Dart Settings", -100)
-
-    cv2.createTrackbar("Min_Dist", "Dart Settings", 1590, 4000, empty)
-    cv2.createTrackbar("Min_Radius", "Dart Settings", 2800, 4000, empty)
-    cv2.createTrackbar("Max_Radius", "Dart Settings", 17, 1000, empty)
-    cv2.createTrackbar("Circle4", "Dart Settings", 251, 1000, empty)
+    # Einstellungen für Segmentation Pizza
+    # cv2.createTrackbar("Min_Dist", "Dart Settings", 1590, 4000, empty)  # min size of area
+    # cv2.createTrackbar("Min_Radius", "Dart Settings", 2800, 4000, empty) # max size of area
+    # cv2.createTrackbar("Max_Radius", "Dart Settings", 17, 1000, empty)  # canny low
+    # cv2.createTrackbar("Circle4", "Dart Settings", 50, 1000, empty) # canny high
+    # cv2.createTrackbar("Circle5", "Dart Settings", 200, 200, empty)
+    # cv2.createTrackbar("Circle6", "Dart Settings", 100, 100, empty)
+    # cv2.createTrackbar("X_Offset", "Dart Settings", 0, 100, empty)
+    # cv2.setTrackbarMin("X_Offset", "Dart Settings", -100)
+    # cv2.createTrackbar("Y_Offset", "Dart Settings", 0, 100, empty)
+    # cv2.setTrackbarMin("Y_Offset", "Dart Settings", -100)
+    # Einstellungen für Segmentation_Rest
+    cv2.createTrackbar("Min_Dist", "Dart Settings", 1600, 4000, empty)
+    cv2.createTrackbar("Min_Radius", "Dart Settings", 3500, 4000, empty)
+    cv2.createTrackbar("Max_Radius", "Dart Settings", 8, 1000, empty)
+    cv2.createTrackbar("Circle4", "Dart Settings", 85, 1000, empty)
     cv2.createTrackbar("Circle5", "Dart Settings", 200, 200, empty)
     cv2.createTrackbar("Circle6", "Dart Settings", 100, 100, empty)
     cv2.createTrackbar("X_Offset", "Dart Settings", 0, 100, empty)
