@@ -1,10 +1,10 @@
-import tensorflow as tf
-from tensorflow.compat.v1.keras import backend as K
+#import tensorflow as tf
+#from tensorflow.compat.v1.keras import backend as K
 
-from tensorflow.python.framework import graph_io
+#from tensorflow.python.framework import graph_io
 
 
-def keras_to_frozen_pb(model_in_path,
+'''def keras_to_frozen_pb(model_in_path,
                        model_out_path,
                        custom_object_dict=None,
                        tensor_out_name=None,
@@ -50,12 +50,12 @@ def keras_to_frozen_pb(model_in_path,
 
     return tensor_out_name
 
-input_keras_model = "C:\\Users\\larsg\\PycharmProjects\\cantinaSelfCheckout\\trained_models\\own_data_with_none_class.h5"
-output_pb_model = "C:\\Users\\larsg\\PycharmProjects\\cantinaSelfCheckout\\trained_models\\own_model_with_none_class.pb"
-
+# input_keras_model = "C:\\Users\\larsg\\PycharmProjects\\cantinaSelfCheckout\\trained_models\\own_data_with_none_class.h5"
+# output_pb_model = "C:\\Users\\larsg\\PycharmProjects\\cantinaSelfCheckout\\trained_models\\own_model_with_none_class.pb"
+'''
 import uff
 import tensorrt as trt
-
+import tensorflow as tf
 
 def frozen_pb_to_plan(model_path,
                       output_path,
@@ -110,8 +110,8 @@ if __name__ == "__main__":
     '''
     generate the inference engine 
     '''
-    pb_model_path = "C:\\Users\\larsg\\PycharmProjects\\cantinaSelfCheckout\\trained_models\\own_model_with_none_class.pb"
-    plan_model_path = "C:\\Users\\larsg\\PycharmProjects\\cantinaSelfCheckout\\trained_models\\own_model_with_none_class.plan"
+    pb_model_path = "/home/jetson/Desktop/cantinaSelfCheckout/trained_models/own_model_with_none_class.pb"
+    plan_model_path = "/home/jetson/Desktop/cantinaSelfCheckout/trained_models/own_model_with_none_class.plan"
     input_node_name = "input_1"
     output_node_name = "predictions/Softmax"
 
