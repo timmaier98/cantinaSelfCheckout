@@ -15,7 +15,7 @@ cap.set(3, 1280)
 cap.set(4, 720)
 
 model = torch.hub.load("ultralytics/yolov5", "custom",
-                       path="/Yolo/trained_models/model_- 16 december 2022 23_16.pt",
+                       path="C:\\Users\\larsg\\PycharmProjects\\cantinaSelfCheckout\\Yolo\\trained_models\\model_- 16 december 2022 23_16.pt",
                        force_reload=False)
 while True:
     success, img = cap.read()

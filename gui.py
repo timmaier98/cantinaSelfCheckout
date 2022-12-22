@@ -6,6 +6,7 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import cv2
 import FPS as FPS
+import torch
 
 syscolor = "#031c29"
 syscolorButtons = "#3a3a3a"
@@ -20,6 +21,13 @@ custom_red = "#A52F2F"
 width = 1280
 height = 720
 frame_rate = 60
+
+print("Starting GUI.py")
+print("loading model")
+model = torch.hub.load("ultralytics/yolov5", "custom",
+                       path="/home/jetson/Desktop/cantinaSelfCheckout/Yolo/trained_models/model_- 22 december 2022 16_01.pt",
+                       force_reload=False)
+print("done loading model")
 
 
 def gstreamer_pipeline(
@@ -155,6 +163,9 @@ class Gui:
                         frame = cv2.resize(frame, (self.cam_width, self.cam_height))
                         frame = frame[self.cropdistY:self.cam_height-self.cropdistY, self.cropdistX:self.cam_width-self.cropdistX]
                         self.globalFrame = frame
+                        results = model(frame)
+                        results.print()
+                        results.render()
                         fps, frame = fps_reader.update(img=frame)
                         img_update = ImageTk.PhotoImage(Image.fromarray(frame))
                         self.image_label.configure(image=img_update)
