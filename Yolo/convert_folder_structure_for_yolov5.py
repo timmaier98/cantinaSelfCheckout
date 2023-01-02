@@ -14,6 +14,10 @@ if not os.path.exists(new_dir):
 # Then run this script to get the folder structure for YoloV5
 # When zipping the folder structure for YoloV5, make sure to have en folder in a folder
 
+valid_percentage = 0.2
+test_percentage = 0.1
+train_percentage = 1 - valid_percentage - test_percentage
+
 def crate_yolo_folder_structure(dir, new_dir):
     # copy data.yaml
     shutil.copy(os.path.join(dir, "data.yaml"), os.path.join(new_dir, "data.yaml"))
@@ -61,6 +65,7 @@ def crate_yolo_folder_structure(dir, new_dir):
             label_file = file.replace(".png", ".txt")
             if not os.path.exists(os.path.join(dir, label_file)):   # check if label file exists
                 continue
+            random_split = random.random()
             if random.random() < 0.2:
                 # print("Would move file: " + os.path.join(train_folder, file) + " to " + os.path.join(valid_images_dir, file))
                 shutil.copy(os.path.join(train_folder, file), valid_images_dir)

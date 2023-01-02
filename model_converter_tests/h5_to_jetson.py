@@ -8,8 +8,8 @@
 # # Clear any previous session.
 # tf.keras.backend.clear_session()
 #
-# save_pb_dir = 'trained_models'
-# model_fname = 'trained_models/own_data_with_none_class.h5'
+# save_pb_dir = 'trained_models_archive'
+# model_fname = 'trained_models_archive/own_data_with_none_class.h5'
 # def freeze_graph(graph, session, output, save_pb_dir='.', save_pb_name='frozen_model.pb', save_pb_as_text=False):
 #     with graph.as_default():
 #         # graphdef_inf = tf.graph_util.remove_training_nodes(graph.as_graph_def())
@@ -149,7 +149,7 @@ from tensorflow.python.compiler.tensorrt import trt_convert as trt
 
 # import tensorflow as tf
 #
-# input_saved_model_dir = 'trained_models/own_data_with_none_class.h5'
+# input_saved_model_dir = 'trained_models_archive/own_data_with_none_class.h5'
 # output_saved_model_dir = "my_model.engine"
 #
 # converter = tf.experimental.tensorrt.Converter(input_saved_model_dir=input_saved_model_dir)

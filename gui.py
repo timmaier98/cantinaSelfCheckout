@@ -25,7 +25,7 @@ frame_rate = 60
 print("Starting GUI.py")
 print("loading model")
 model = torch.hub.load("ultralytics/yolov5", "custom",
-                       path="/home/jetson/Desktop/cantinaSelfCheckout/Yolo/trained_models/model_- 22 december 2022 16_01.pt",
+                       path="/home/jetson/Desktop/cantinaSelfCheckout/Yolo/trained_models_archive/model_- 22 december 2022 16_01.pt",
                        force_reload=False)
 print("done loading model")
 
