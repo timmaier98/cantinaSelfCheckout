@@ -25,8 +25,8 @@ frame_rate = 60
 print("Starting GUI.py")
 print("loading model")
 model = torch.hub.load("ultralytics/yolov5", "custom",
-                       path="/home/jetson/Desktop/cantinaSelfCheckout/Yolo/trained_models_archive/model_- 22 december 2022 16_01.pt",
-                       force_reload=False)
+                      path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/model_- 28 december 2022 14_58.pt",
+                      force_reload=False)
 print("done loading model")
 
 
@@ -73,7 +73,7 @@ class Gui:
         s = ttk.Style()
         s.configure('Custom.TFrame', background=syscolor)
 
-        self.path = "/home/jetson/Desktop/cantinaSelfCheckout/Trainingsbilder/newMeal"
+        self.path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Trainingsbilder/newMeal"
 
         self.frame_base = ttk.Frame(master=self.app, style='Custom.TFrame')
         self.frame_base.pack(pady=10, padx=2, fill="both", expand=True)
@@ -167,9 +167,7 @@ class Gui:
                         results.print()
                         frame_w_bb = results.render()
                         frame = frame_w_bb[0]
-                        cv2.imshow("Name", frame)
-                        cv2.waitKey(1)
-                        #fps, frame = fps_reader.update(img=frame)
+                        fps, frame = fps_reader.update(img=frame)
                         img_update = ImageTk.PhotoImage(Image.fromarray(frame))
                         self.image_label.configure(image=img_update)
                         self.image_label.update()
