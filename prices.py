@@ -14,7 +14,7 @@ prices = {
 "PizzaPesto" : 3.50,
 "PizzaVerdure" : 3.50,
 "ReisMitTomate" : 3.50,
-"Sauerkischpudding" : 3.50,
+"Sauerkirschpudding" : 3.50,
 "Schokopudding" : 2.50,
 "Skittels" : 1.50,
 "Snickers" : 1.50,
