@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 import cv2
 import FPS as FPS
 import torch
-
+from prices import prices
 syscolor = "#031c29"
 syscolorButtons = "#3a3a3a"
 font_buttons = ("Calibri", 16)
