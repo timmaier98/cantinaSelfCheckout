@@ -165,6 +165,9 @@ class Gui:
                         self.globalFrame = frame
                         results = model(frame)
                         results.print()
+                        df = results.pandas().xyxy[0]
+                        sum_price = self.calculate_overall_price(df)
+                        print(sum_price)
                         frame_w_bb = results.render()
                         frame = frame_w_bb[0]
                         fps, frame = fps_reader.update(img=frame)
@@ -184,6 +187,15 @@ class Gui:
         self.cam.release()
         cv2.destroyAllWindows()
         print("Stopped!")
+
+    def calculate_overall_price(self, df):
+        price = 0
+        # get the price of each item in the df with the name col
+        df['price'] = df['name'].apply(lambda x: prices[x])
+
+        for index, row in df.iterrows():
+            price += row['price']
+        return price
 
 
 if __name__ == "__main__":
