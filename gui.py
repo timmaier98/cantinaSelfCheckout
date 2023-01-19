@@ -8,6 +8,7 @@ import cv2
 import FPS as FPS
 import torch
 from prices import prices
+import pandas as pd
 syscolor = "#031c29"
 syscolorButtons = "#3a3a3a"
 font_buttons = ("Calibri", 16)
@@ -22,12 +23,17 @@ width = 1280
 height = 720
 frame_rate = 60
 
+loadModel = True
+contDetection = True
+devMode = False
+
 print("Starting GUI.py")
 print("loading model")
-model = torch.hub.load("ultralytics/yolov5", "custom",
+if loadModel:
+	model = torch.hub.load("ultralytics/yolov5", "custom",
                       path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best.pt",
                       force_reload=False)
-print("done loading model")
+	print("done loading model")
 
 
 def gstreamer_pipeline(
@@ -72,41 +78,59 @@ class Gui:
 
         s = ttk.Style()
         s.configure('Custom.TFrame', background=syscolor)
-
-        self.path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Trainingsbilder/newMeal"
-
+        
         self.frame_base = ttk.Frame(master=self.app, style='Custom.TFrame')
         self.frame_base.pack(pady=10, padx=2, fill="both", expand=True)
         self.overall_price = 0
 
+        self.df_list = [pd.DataFrame() for i in range(5)]
+        self.stop_detecting = False
+        self.start_detecting = True
+
+        if devMode:
+            self.path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Trainingsbilder/newMeal"
+            btn_pics = tk.Button(master=self.frame_base, text='Choose directory', width=12, height=1, font=font_buttons, bg=custom_orange,
+                            activebackground=custom_orange_pressed, borderwidth=0, command=self.choose_directory)
+            btn_pics.place(relx=0.97, rely=0.02, anchor=tk.NE)
+           
+            self.dirVar = StringVar()
+            self.dirVar.set("cantinaSelfCheckout/Trainingsbilder/newMeal")
+            dir_text_box = tk.Label(master=self.frame_base, textvariable=self.dirVar, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
+            dir_text_box.place(relx=0.97, rely=0.1, anchor=tk.NE)
+        else:
+            logo_img = Image.open("./gui_images/logo_final_weiss.png")
+            logo_img = logo_img.resize((int(180), 180))
+            photo_logo = ImageTk.PhotoImage(logo_img)
+            logo_lable = tk.Label(master=self.frame_base, image=photo_logo, bg=syscolor)
+            logo_lable.place(relx=0.97, rely=-0.02, anchor=tk.NE)            
+
+
+        self.btn_pics = tk.Button(master=self.frame_base, text='Choose manually', width=12, height=1, font=font_buttons, bg=custom_orange,
+                            activebackground=custom_orange_pressed, borderwidth=0)
+
         confirm_img = Image.open("./gui_images/confirmImage.png")
         confirm_img = confirm_img.resize((100, 100))
         photo_confirm_button = ImageTk.PhotoImage(confirm_img)
-        confirm_button = tk.Button(master=self.frame_base, image=photo_confirm_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0)
+        confirm_button = tk.Button(master=self.frame_base, image=photo_confirm_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0, command=self.confirm_pressed)
         confirm_button.place(relx=0.99, rely=0.99, anchor=tk.SE)
 
         repeat_img = Image.open("./gui_images/repeat.png")
         repeat_img = repeat_img.resize((105, 105))
         photo_repeat_button = ImageTk.PhotoImage(repeat_img)
-        repeat_button = tk.Button(master=self.frame_base, image=photo_repeat_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0)
+        repeat_button = tk.Button(master=self.frame_base, image=photo_repeat_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0, command=self.repeat_pressed)
         repeat_button.place(relx=0.87, rely=0.99, anchor=tk.SE)
 
-        btn_pics = tk.Button(master=self.frame_base, text='Choose directory', width=12, height=1, font=font_buttons, bg=custom_orange,
-                            activebackground=custom_orange_pressed, borderwidth=0, command=self.choose_directory)
-        btn_pics.place(relx=0.97, rely=0.02, anchor=tk.NE)
-        
-        self.dirVar = StringVar()
-        self.dirVar.set("cantinaSelfCheckout/Trainingsbilder/newMeal")
-        dir_text_box = tk.Label(master=self.frame_base, textvariable=self.dirVar, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
-        dir_text_box.place(relx=0.97, rely=0.1, anchor=tk.NE)
-
         self.listbox = Listbox(self.frame_base, width=22, height=10, bg=syscolor, fg="white")  
-        self.listbox.place(relx=0.97, rely=0.2, anchor=tk.NE)
+        self.listbox.place(relx=0.97, rely=0.3, anchor=tk.NE)
+        detected_meals_lable = tk.Label(master=self.frame_base, text="Detected meals:", font=("Calibri", 16), bg=syscolor, foreground="white", width=25)
+        detected_meals_lable.place(relx=0.72, rely=0.25, anchor=tk.NW)
 
         self.dirVarMoney = StringVar()
-        self.dirVarMoney.set("0 €")
-        dir_text_box_price = tk.Label(master=self.frame_base, textvariable=self.dirVarMoney, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
-        dir_text_box_price.place(relx=0.97, rely=0.6, anchor=tk.NE)
+        self.dirVarMoney.set("Total: 0.00 €")
+        dir_text_box_price = tk.Label(master=self.frame_base, textvariable=self.dirVarMoney, font=("Calibri", 20), bg=syscolor, foreground="white", width=25)
+        dir_text_box_price.place(relx=0.683, rely=0.62, anchor=tk.NW)
+        self.student_discount_lable = tk.Label(master=self.frame_base, text="Student-Discount applied!", font=("Calibri", 10), bg=syscolor, foreground="#00A912", width=25)
+
         
         # Video Elements
         self.cam = None
@@ -124,7 +148,8 @@ class Gui:
         self.app.mainloop()
     
     def take_sample_pictures(self, *event):
-        print('Saving Frame')
+        print('Saving Frame') 
+        self.globalFrame = cv2.cvtColor(self.globalFrame, cv2.COLOR_RGB2BGR)
         cv2.imwrite(self.path + "/c" +str(self.index)+'.png', self.globalFrame)
         self.index += 1
 
@@ -162,29 +187,53 @@ class Gui:
         # To flip the image, modify the flip_method parameter (0 and 2 are the most common)
         print(gstreamer_pipeline(flip_method=0))
         video_capture = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+        detecting_string = "Detecting"
 
         if video_capture.isOpened():
             try: 
                 while True:
-                    ret_val, frame = video_capture.read()       
+                    ret_val, frame = video_capture.read()     
                     if ret_val: 
-                        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                        frame = cv2.resize(frame, (self.cam_width, self.cam_height))
-                        frame = frame[self.cropdistY:self.cam_height-self.cropdistY, self.cropdistX:self.cam_width-self.cropdistX]
-                        self.globalFrame = frame
-                        results = model(frame)
-                        results.print()
-                        df = results.pandas().xyxy[0]
-                        sum_price = self.calculate_overall_price(df)
-                        print(sum_price)
-                        frame_w_bb = results.render()
-                        frame = frame_w_bb[0]
-                        fps, frame = fps_reader.update(img=frame)
-                        img_update = ImageTk.PhotoImage(Image.fromarray(frame))
-                        self.image_label.configure(image=img_update)
-                        self.image_label.update()
-                        self.listbox.delete(0, self.listbox.size())
-                        self.dirVarMoney.set(f"{sum_price:.2f} €")
+                        if not self.stop_detecting:
+                            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                            frame = cv2.resize(frame, (self.cam_width, self.cam_height))
+                            frame = frame[self.cropdistY:self.cam_height-self.cropdistY, self.cropdistX:self.cam_width-self.cropdistX]
+                            self.globalFrame = frame.copy()
+                            if loadModel:
+                                results = model(frame)
+                                results.print()
+                                df = results.pandas().xyxy[0]
+                                print(self.start_detecting)
+                                print(df.empty)
+                                if not df.empty:
+                                      self.df_list.append(df["name"])
+                                      self.df_list.pop(0)
+                                      if self.check_if_df_are_equal(self.df_list) and self.start_detecting:
+                                          self.stop_detecting = True
+                                          self.start_detecting = False
+                                          self.df_list = [pd.DataFrame() for i in range(5)]
+                                else: 
+                                      self.start_detecting = True
+                                      self.df_list = [pd.DataFrame() for i in range(5)]
+                                sum_price = self.calculate_overall_price(df)
+                                frame_w_bb = results.render()
+                                frame = frame_w_bb[0]
+                            fps, frame = fps_reader.update(img=frame)
+                            if self.stop_detecting:
+                                frame = cv2.putText(frame, "Detected", (frame.shape[0] - 40, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                            else:
+                                frame = cv2.putText(frame, detecting_string, (frame.shape[0] - 40, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+                                detecting_string += "."
+                                if len(detecting_string) >= 13:
+                                    detecting_string = "Detecting"
+                            img_update = ImageTk.PhotoImage(Image.fromarray(frame))
+                            self.image_label.configure(image=img_update)
+                            self.image_label.update()
+                            if loadModel and not self.stop_detecting:
+                                self.listbox.delete(0, self.listbox.size())
+                                self.dirVarMoney.set(f"Total: {sum_price:.2f} €")
+                        else: 
+                            self.image_label.update()
                     else:
                         print("Failed to grab frame from CSI camera.")
             finally:
@@ -211,13 +260,13 @@ class Gui:
             multiplier = student_multiplier
             # remove the AtheneKarte from the df
             df = df[df['name'] != 'AtheneKarte']
-            self.listbox.insert(0, "Student-Discount applied!")
+            self.student_discount_lable.place(relx=0.782, rely=0.59, anchor=tk.NW)
+        else: 
+            self.student_discount_lable.place_forget()
 
         # sort dataframe alphabetically:
         df = df.sort_values('name')
         for index, row in df.iterrows():
-            if multiplier == student_multiplier:
-                index += 1
             item_price = row['price'] * multiplier
             item_price = round(item_price, 2)
             total_price += item_price
@@ -225,6 +274,28 @@ class Gui:
         total_price = round(total_price, 2)
         return total_price
 
+    def check_if_df_are_equal(self, df_list):
+        if df_list[0].empty:
+            return False
+        for df in df_list:
+            if not df_list[0].equals(df):
+                return False
+        return True
+
+    def confirm_pressed(self):
+        self.stop_detecting = False
+        self.btn_pics.place_forget()
+        self.listbox.delete(0, self.listbox.size())
+        self.dirVarMoney.set(f"Total: 0.00 €")
+        self.df_list = [pd.DataFrame() for i in range(5)]
+
+    def repeat_pressed(self):
+        self.stop_detecting = False
+        self.btn_pics.place(relx=0.97, rely=0.72, anchor=tk.NE)
+        self.listbox.delete(0, self.listbox.size())
+        self.dirVarMoney.set(f"Total: 0.00 €")
+        self.df_list = [pd.DataFrame() for i in range(5)]
+        self.start_detecting = True
 
 if __name__ == "__main__":
     gui = Gui()
