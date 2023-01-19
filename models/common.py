@@ -596,20 +596,20 @@ class DetectMultiBackend(nn.Module):
             for _ in range(2 if self.jit else 1):  #
                 self.forward(im)  # warmup
 
-    # @staticmethod
-    # def _model_type(p='path/to/model.pt'):
-    #     # Return model type from model path, i.e. path='path/to/model.onnx' -> type=onnx
-    #     # types = [pt, jit, onnx, xml, engine, coreml, saved_model, pb, tflite, edgetpu, tfjs, paddle]
-    #     from export import export_formats
-    #     from utils.downloads import is_url
-    #     sf = list(export_formats().Suffix)  # export suffixes
-    #     if not is_url(p, check=False):
-    #         check_suffix(p, sf)  # checks
-    #     url = urlparse(p)  # if url may be Triton inference server
-    #     types = [s in Path(p).name for s in sf]
-    #     types[8] &= not types[9]  # tflite &= not edgetpu
-    #     triton = not any(types) and all([any(s in url.scheme for s in ["http", "grpc"]), url.netloc])
-    #     return types + [triton]
+    @staticmethod
+    def _model_type(p='path/to/model.pt'):
+        # Return model type from model path, i.e. path='path/to/model.onnx' -> type=onnx
+        # types = [pt, jit, onnx, xml, engine, coreml, saved_model, pb, tflite, edgetpu, tfjs, paddle]
+        from export import export_formats
+        from utils.downloads import is_url
+        sf = list(export_formats().Suffix)  # export suffixes
+        if not is_url(p, check=False):
+            check_suffix(p, sf)  # checks
+        url = urlparse(p)  # if url may be Triton inference server
+        types = [s in Path(p).name for s in sf]
+        types[8] &= not types[9]  # tflite &= not edgetpu
+        triton = not any(types) and all([any(s in url.scheme for s in ["http", "grpc"]), url.netloc])
+        return types + [triton]
 
     @staticmethod
     def _load_metadata(f=Path('path/to/meta.yaml')):
