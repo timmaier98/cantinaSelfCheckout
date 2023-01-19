@@ -16,11 +16,12 @@ prices = {
 "ReisMitTomate" : 3.50,
 "Sauerkirschpudding" : 3.50,
 "Schokopudding" : 2.50,
-"Skittels" : 1.50,
+"Skittles" : 1.50,
 "Snickers" : 1.50,
 "SoleroPudding" : 2.50,
 "Spezi" : 1.50,
 "Spinat" : 3.50,
+"AtheneKarte" : 0,
 }
 
 
