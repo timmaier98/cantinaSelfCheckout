@@ -203,8 +203,10 @@ class Gui:
                                 results = model(frame)
                                 results.print()
                                 df = results.pandas().xyxy[0]
-                                print(self.start_detecting)
-                                print(df.empty)
+                                df = df.sort_values('name')
+                                df = df.reset_index(drop = True)
+                                sum_price = self.calculate_overall_price(df)
+                                print(df)
                                 if not df.empty:
                                       self.df_list.append(df["name"])
                                       self.df_list.pop(0)
@@ -215,7 +217,6 @@ class Gui:
                                 else: 
                                       self.start_detecting = True
                                       self.df_list = [pd.DataFrame() for i in range(5)]
-                                sum_price = self.calculate_overall_price(df)
                                 frame_w_bb = results.render()
                                 frame = frame_w_bb[0]
                             fps, frame = fps_reader.update(img=frame)
@@ -265,7 +266,6 @@ class Gui:
             self.student_discount_lable.place_forget()
 
         # sort dataframe alphabetically:
-        df = df.sort_values('name')
         for index, row in df.iterrows():
             item_price = row['price'] * multiplier
             item_price = round(item_price, 2)
@@ -275,8 +275,6 @@ class Gui:
         return total_price
 
     def check_if_df_are_equal(self, df_list):
-        if df_list[0].empty:
-            return False
         for df in df_list:
             if not df_list[0].equals(df):
                 return False
