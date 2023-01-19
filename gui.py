@@ -222,6 +222,7 @@ class Gui:
             item_price = round(item_price, 2)
             total_price += item_price
             self.listbox.insert(index,f"{row['name']} {item_price}€")
+        total_price = round(total_price, 2)
         return total_price
 
 
