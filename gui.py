@@ -206,16 +206,19 @@ class Gui:
 
         # check if df contains item with name 'AtheneKarte':
         multiplier = 1
+        student_multiplier = 0.8
         if 'AtheneKarte' in df['name'].values:
-            multiplier = 0.8
+            multiplier = student_multiplier
             # remove the AtheneKarte from the df
             df = df[df['name'] != 'AtheneKarte']
             self.listbox.insert(0, "Student-Discount applied!")
 
+        # sort dataframe alphabetically:
+        df = df.sort_values(by=['name'])
         for index, row in df.iterrows():
-            if multiplier == 0.8:
+            if multiplier == student_multiplier:
                 index += 1
-            price += row['price']
+            price += row['price'] * multiplier
             self.listbox.insert(index,f"{row['name']} {row['price']}€")
         return price
 
