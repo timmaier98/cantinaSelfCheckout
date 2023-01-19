@@ -71,7 +71,7 @@ class Gui:
         # self.app.resizable(False, False)
         self.app.title("cantinaSelfCheckout")
         self.app.config(background=syscolor)  # background color of the window
-        # self.app.attributes("-fullscreen", True)
+        self.app.attributes("-fullscreen", True)
 
         self.app.bind("<Escape>", lambda e: self.app.destroy())
         self.app.bind("<s>", self.take_sample_pictures)
