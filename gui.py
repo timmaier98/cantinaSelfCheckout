@@ -221,7 +221,7 @@ class Gui:
             item_price = row['price'] * multiplier
             item_price = round(item_price, 2)
             total_price += item_price
-            self.listbox.insert(index,f"{row['name']} {row['price']*multiplier}€")
+            self.listbox.insert(index,f"{row['name']} {item_price}€")
         return total_price
 
 
