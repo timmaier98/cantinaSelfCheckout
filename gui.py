@@ -203,7 +203,18 @@ class Gui:
         price = 0
         # get the price of each item in the df with the name col
         df['price'] = df['name'].apply(lambda x: prices[x])
+
+        # check if df contains item with name 'AtheneKarte':
+        multiplier = 1
+        if 'AtheneKarte' in df['name'].values:
+            multiplier = 0.8
+            # remove the AtheneKarte from the df
+            df = df[df['name'] != 'AtheneKarte']
+            self.listbox.insert(0, "Student-Discount applied!")
+
         for index, row in df.iterrows():
+            if multiplier == 0.8:
+                index += 1
             price += row['price']
             self.listbox.insert(index,f"{row['name']} {row['price']}€")
         return price
