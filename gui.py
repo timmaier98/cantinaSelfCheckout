@@ -200,7 +200,7 @@ class Gui:
         print("Stopped!")
 
     def calculate_overall_price(self, df):
-        price = 0
+        total_price = 0
         # get the price of each item in the df with the name col
         df['price'] = df['name'].apply(lambda x: prices[x])
 
@@ -218,9 +218,11 @@ class Gui:
         for index, row in df.iterrows():
             if multiplier == student_multiplier:
                 index += 1
-            price += row['price'] * multiplier
-            self.listbox.insert(index,f"{row['name']} {row['price']}€")
-        return price
+            item_price = row['price'] * multiplier
+            item_price = round(item_price, 2)
+            total_price += item_price
+            self.listbox.insert(index,f"{row['name']} {row['price']*multiplier}€")
+        return total_price
 
 
 if __name__ == "__main__":
