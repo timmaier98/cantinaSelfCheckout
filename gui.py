@@ -24,10 +24,21 @@ frame_rate = 60
 
 print("Starting GUI.py")
 print("loading model")
-model = torch.hub.load("ultralytics/yolov5", "custom",
-                      path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/model_- 28 december 2022 14_58.pt",
-                      force_reload=False)
-print("done loading model")
+# model = torch.hub.load("ultralytics/yolov5", "custom",
+#                       path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/model_- 28 december 2022 14_58.pt",
+#                       force_reload=False)
+# print("done loading model")
+
+from models.common import DetectMultiBackend
+
+tensor_rt_engine_path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best_yolov8.engine"
+
+model = DetectMultiBackend(tensor_rt_engine_path, device=0,
+                           # dnn=dnn,
+                           # data=data,
+                           # fp16=half
+                           )
+
 
 '''
 from models.common import DetectMultiBackend
