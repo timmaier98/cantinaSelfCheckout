@@ -24,33 +24,10 @@ frame_rate = 60
 
 print("Starting GUI.py")
 print("loading model")
-# model = torch.hub.load("ultralytics/yolov5", "custom",
-#                       path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/model_- 28 december 2022 14_58.pt",
-#                       force_reload=False)
-# print("done loading model")
-
-from models.common import DetectMultiBackend
-
-tensor_rt_engine_path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best_yolov8.engine"
-
-model = DetectMultiBackend(tensor_rt_engine_path, device=0,
-                           # dnn=dnn,
-                           # data=data,
-                           # fp16=half
-                           )
-
-
-'''
-from models.common import DetectMultiBackend
-
-tensor_rt_engine_path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov8/trained_models/best_yolov8.engine"
-
-model = DetectMultiBackend(tensor_rt_engine_path, device=0,
-                           # dnn=dnn,
-                           # data=data,
-                           # fp16=half
-                           )
-'''
+model = torch.hub.load("ultralytics/yolov5", "custom",
+                      path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/model_- 28 december 2022 14_58.pt",
+                      force_reload=False)
+print("done loading model")
 
 
 def gstreamer_pipeline(
@@ -101,7 +78,7 @@ class Gui:
         self.frame_base = ttk.Frame(master=self.app, style='Custom.TFrame')
         self.frame_base.pack(pady=10, padx=2, fill="both", expand=True)
         self.overall_price = 0
-        
+
         confirm_img = Image.open("./gui_images/confirmImage.png")
         confirm_img = confirm_img.resize((100, 100))
         photo_confirm_button = ImageTk.PhotoImage(confirm_img)
@@ -191,7 +168,6 @@ class Gui:
                         results.print()
                         df = results.pandas().xyxy[0]
                         sum_price = self.calculate_overall_price(df)
-                        self.overall_price = sum_price
                         print(sum_price)
                         frame_w_bb = results.render()
                         frame = frame_w_bb[0]
