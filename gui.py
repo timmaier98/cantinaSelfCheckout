@@ -99,6 +99,14 @@ class Gui:
         self.dirVar.set("cantinaSelfCheckout/Trainingsbilder/newMeal")
         dir_text_box = tk.Label(master=self.frame_base, textvariable=self.dirVar, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
         dir_text_box.place(relx=0.97, rely=0.1, anchor=tk.NE)
+
+        self.listbox = Listbox(self.frame_base, width=22, height=10, bg=syscolor, fg="white")  
+        self.listbox.place(relx=0.97, rely=0.2, anchor=tk.NE)
+
+        self.dirVarMoney = StringVar()
+        self.dirVarMoney.set("0 €")
+        dir_text_box_price = tk.Label(master=self.frame_base, textvariable=self.dirVarMoney, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
+        dir_text_box_price.place(relx=0.97, rely=0.6, anchor=tk.NE)
         
         # Video Elements
         self.cam = None
@@ -175,6 +183,8 @@ class Gui:
                         img_update = ImageTk.PhotoImage(Image.fromarray(frame))
                         self.image_label.configure(image=img_update)
                         self.image_label.update()
+                        self.listbox.delete(0, self.listbox.size())
+                        self.dirVarMoney.set(f"{sum_price} €")
                     else:
                         print("Failed to grab frame from CSI camera.")
             finally:
@@ -195,6 +205,7 @@ class Gui:
         df['price'] = df['name'].apply(lambda x: prices[x])
         for index, row in df.iterrows():
             price += row['price']
+            self.listbox.insert(index,f"{row['name']} {row['price']}€")
         return price
 
 
