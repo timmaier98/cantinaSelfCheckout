@@ -184,7 +184,7 @@ class Gui:
                         self.image_label.configure(image=img_update)
                         self.image_label.update()
                         self.listbox.delete(0, self.listbox.size())
-                        self.dirVarMoney.set(f"{sum_price} €")
+                        self.dirVarMoney.set(f"{sum_price:.2f} €")
                     else:
                         print("Failed to grab frame from CSI camera.")
             finally:
@@ -214,14 +214,14 @@ class Gui:
             self.listbox.insert(0, "Student-Discount applied!")
 
         # sort dataframe alphabetically:
-        df = df.sort_values(by=['name'])
+        df = df.sort_values('name')
         for index, row in df.iterrows():
             if multiplier == student_multiplier:
                 index += 1
             item_price = row['price'] * multiplier
             item_price = round(item_price, 2)
             total_price += item_price
-            self.listbox.insert(index,f"{row['name']} {item_price}€")
+            self.listbox.insert(index,f"{row['name']} {item_price:.2f}€")
         total_price = round(total_price, 2)
         return total_price
 
