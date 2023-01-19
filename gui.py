@@ -31,7 +31,7 @@ print("loading model")
 
 from models.common import DetectMultiBackend
 
-tensor_rt_engine_path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best_yolov8.engine"
+tensor_rt_engine_path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov8/trained_models/best_yolov8.engine"
 
 model = DetectMultiBackend(tensor_rt_engine_path, device=0,
                            # dnn=dnn,
