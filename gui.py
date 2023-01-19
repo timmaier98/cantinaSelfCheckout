@@ -24,10 +24,21 @@ frame_rate = 60
 
 print("Starting GUI.py")
 print("loading model")
-model = torch.hub.load("ultralytics/yolov5", "custom",
-                      path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/model_- 28 december 2022 14_58.pt",
-                      force_reload=False)
-print("done loading model")
+# model = torch.hub.load("ultralytics/yolov5", "custom",
+#                       path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/model_- 28 december 2022 14_58.pt",
+#                       force_reload=False)
+# print("done loading model")
+
+from models.common import DetectMultiBackend
+
+tensor_rt_engine_path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best_yolov8.engine"
+
+model = DetectMultiBackend(tensor_rt_engine_path, device=0,
+                           # dnn=dnn,
+                           # data=data,
+                           # fp16=half
+                           )
+
 
 
 def gstreamer_pipeline(
@@ -77,6 +88,7 @@ class Gui:
 
         self.frame_base = ttk.Frame(master=self.app, style='Custom.TFrame')
         self.frame_base.pack(pady=10, padx=2, fill="both", expand=True)
+        self.overall_price = 0
         
         confirm_img = Image.open("./gui_images/confirmImage.png")
         confirm_img = confirm_img.resize((100, 100))
@@ -98,15 +110,6 @@ class Gui:
         self.dirVar.set("cantinaSelfCheckout/Trainingsbilder/newMeal")
         dir_text_box = tk.Label(master=self.frame_base, textvariable=self.dirVar, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
         dir_text_box.place(relx=0.97, rely=0.1, anchor=tk.NE)
-
-        self.listbox = Listbox(self.frame_base, width=22, height=10, bg=syscolor, fg="white")  
-        self.listbox.place(relx=0.97, rely=0.2, anchor=tk.NE)
-
-        self.dirVarMoney = StringVar()
-        self.dirVarMoney.set("0 €")
-        dir_text_box_price = tk.Label(master=self.frame_base, textvariable=self.dirVarMoney, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
-        dir_text_box_price.place(relx=0.97, rely=0.6, anchor=tk.NE)
-
         
         # Video Elements
         self.cam = None
@@ -137,8 +140,7 @@ class Gui:
         print(self.dirVar)
 
     def start(self, cam_number=0):
-        """ Start the video feed with a given camera (0 is usually 
-built-in webcam). """
+        """ Start the video feed with a given camera (0 is usually built-in webcam). """
         self.cam = cv2.VideoCapture(cam_number)
         self.cam.set(3, 1280)
         self.cam.set(4, 720)
@@ -177,6 +179,7 @@ built-in webcam). """
                         results.print()
                         df = results.pandas().xyxy[0]
                         sum_price = self.calculate_overall_price(df)
+                        self.overall_price = sum_price
                         print(sum_price)
                         frame_w_bb = results.render()
                         frame = frame_w_bb[0]
@@ -184,8 +187,6 @@ built-in webcam). """
                         img_update = ImageTk.PhotoImage(Image.fromarray(frame))
                         self.image_label.configure(image=img_update)
                         self.image_label.update()
-                        self.listbox.delete(0, self.listbox.size())
-                        self.dirVarMoney.set(f"{sum_price} €")
                     else:
                         print("Failed to grab frame from CSI camera.")
             finally:
@@ -206,7 +207,6 @@ built-in webcam). """
         df['price'] = df['name'].apply(lambda x: prices[x])
         for index, row in df.iterrows():
             price += row['price']
-            self.listbox.insert(index,f"{row['name']} {row['price']}€") 
         return price
 
 
