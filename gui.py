@@ -222,6 +222,30 @@ class Gui:
                                     print(frame_model.shape)
                                     results = model(frame_model)
                                     print(results)
+
+                                    def postprocess(output_data):
+                                        # get class names
+                                        with open("imagenet_classes.txt") as f:
+                                            classes = [line.strip() for line in f.readlines()]
+                                        # calculate human-readable value by softmax
+                                        confidences = torch.nn.functional.softmax(output_data, dim=1)[0] * 100
+                                        # find top predicted classes
+                                        _, indices = torch.sort(output_data, descending=True)
+                                        i = 0
+                                        # print the top classes predicted by the model
+                                        while confidences[indices[0][i]] > 0.5:
+                                            class_idx = indices[0][i]
+                                            print(
+                                                "class:",
+                                                classes[class_idx],
+                                                ", confidence:",
+                                                confidences[class_idx].item(),
+                                                "%, index:",
+                                                class_idx.item(),
+                                            )
+                                            i += 1
+
+                                    postprocess(results)
                                 else:
                                     results = model(frame)
                                     results.print()
