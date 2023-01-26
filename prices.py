@@ -22,6 +22,11 @@ prices = {
 "Spezi" : 1.50,
 "Spinat" : 1.0,
 "AtheneKarte" : 0,
+"Gemuesegratin" : 2.50,
+"Canneloni" : 2.30,
+"PizzaBaguette" : 2.00,
+"Pfirsichjoghurt" : 0.90,
+"Lasange" : 2.70
 }
 
 
