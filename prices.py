@@ -26,7 +26,7 @@ prices = {
 "Canneloni" : 2.30,
 "PizzaBaguette" : 2.00,
 "Pfirsichjoghurt" : 0.90,
-"Lasaagne" : 2.70
+"Lasange" : 2.70
 }
 
 
