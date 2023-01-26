@@ -332,6 +332,7 @@ class DetectMultiBackend(nn.Module):
         from models.experimental import attempt_download, attempt_load  # scoped to avoid circular import
 
         super().__init__()
+        self.device = device
         w = str(weights[0] if isinstance(weights, list) else weights)
         pt, jit, onnx, xml, engine, coreml, saved_model, pb, tflite, edgetpu, tfjs, paddle, triton = self._model_type(w)
         fp16 &= pt or jit or onnx or engine  # FP16
@@ -505,6 +506,7 @@ class DetectMultiBackend(nn.Module):
 
     def forward(self, im, augment=False, visualize=False):
         # YOLOv5 MultiBackend inference
+        im = torch.from_numpy(im).to(self.device)
         b, ch, h, w = im.shape  # batch, channel, height, width
         if self.fp16 and im.dtype != torch.float16:
             im = im.half()  # to FP16

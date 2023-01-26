@@ -9,6 +9,7 @@ import FPS as FPS
 import torch
 from prices import prices
 import pandas as pd
+import numpy as np
 syscolor = "#031c29"
 syscolorButtons = "#3a3a3a"
 font_buttons = ("Calibri", 16)
@@ -26,24 +27,26 @@ frame_rate = 60
 loadModel = True
 contDetection = True
 devMode = False
+tensorrt = True
 
 print("Starting GUI.py")
 print("loading model")
-# if loadModel:
-# 	model = torch.hub.load("ultralytics/yolov5", "custom",
-#                       path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best.pt",
+#if loadModel:
+#	model = torch.hub.load("ultralytics/yolov5", "custom",
+#                       path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best_new_classes.pt",
 #                       force_reload=False)
-# 	print("done loading model")
+#	print("done loading model")
 
 
 from models.common import DetectMultiBackend
 
-tensor_rt_engine_path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best.engine"
+tensor_rt_engine_path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov8/yolov8.engine"
 
-model = DetectMultiBackend(tensor_rt_engine_path, device=0,
+device = torch.device(0)
+model = DetectMultiBackend(tensor_rt_engine_path, device=device,
                            # dnn=dnn,
                            # data=data,
-                           fp16=False
+                           fp16=True
                            )
 
 
@@ -211,8 +214,18 @@ class Gui:
                             frame = frame[self.cropdistY:self.cam_height-self.cropdistY, self.cropdistX:self.cam_width-self.cropdistX]
                             self.globalFrame = frame.copy()
                             if loadModel:
-                                results = model(frame)
-                                results.print()
+                                if tensorrt:
+                                    frame_model = frame.copy()
+                                    frame_model = cv2.resize(frame_model, (640,640))
+                                    frame_model = np.transpose(frame_model, (2,0,1))
+                                    frame_model = np.expand_dims(frame_model, 0)
+                                    print(frame_model.shape)
+                                    results = model(frame_model)
+                                    print(results)
+                                else:
+                                    results = model(frame)
+                                    results.print()
+                                """
                                 df = results.pandas().xyxy[0]
                                 df = df.sort_values('name')
                                 df = df.reset_index(drop = True)
@@ -230,6 +243,7 @@ class Gui:
                                       self.df_list = [pd.DataFrame() for i in range(5)]
                                 frame_w_bb = results.render()
                                 frame = frame_w_bb[0]
+                                """
                             fps, frame = fps_reader.update(img=frame)
                             if self.stop_detecting:
                                 frame = cv2.putText(frame, "Detected", (frame.shape[0] - 40, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
@@ -243,7 +257,7 @@ class Gui:
                             self.image_label.update()
                             if loadModel and not self.stop_detecting:
                                 self.listbox.delete(0, self.listbox.size())
-                                self.dirVarMoney.set(f"Total: {sum_price:.2f} €")
+                                #self.dirVarMoney.set(f"Total: {sum_price:.2f} €")
                         else: 
                             self.image_label.update()
                     else:
