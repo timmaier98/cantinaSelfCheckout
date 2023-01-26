@@ -125,7 +125,7 @@ class Gui:
 
 
         self.btn_pics = tk.Button(master=self.frame_base, text='Choose manually', width=12, height=1, font=font_buttons, bg=custom_orange,
-                            activebackground=custom_orange_pressed, borderwidth=0)
+                            activebackground=custom_orange_pressed, borderwidth=0, command=self.close)
 
         confirm_img = Image.open("./gui_images/confirmImage.png")
         confirm_img = confirm_img.resize((100, 100))
@@ -277,6 +277,8 @@ class Gui:
         self.cam.release()
         cv2.destroyAllWindows()
         print("Stopped!")
+    def close(self):
+        self.app.destroy()
 
 
     def postprocess(self, output_data):
