@@ -29,11 +29,22 @@ devMode = False
 
 print("Starting GUI.py")
 print("loading model")
-if loadModel:
-	model = torch.hub.load("ultralytics/yolov5", "custom",
-                      path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best.pt",
-                      force_reload=False)
-	print("done loading model")
+# if loadModel:
+# 	model = torch.hub.load("ultralytics/yolov5", "custom",
+#                       path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best.pt",
+#                       force_reload=False)
+# 	print("done loading model")
+
+
+from models.common import DetectMultiBackend
+
+tensor_rt_engine_path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best.engine"
+
+model = DetectMultiBackend(tensor_rt_engine_path, device=0,
+                           # dnn=dnn,
+                           # data=data,
+                           fp16=False
+                           )
 
 
 def gstreamer_pipeline(
