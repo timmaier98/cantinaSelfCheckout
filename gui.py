@@ -46,7 +46,7 @@ if loadModel:
   #                              )
   #     model.eval()
   #     model.cuda()
-    model = torch.hub.load(f"{PATH}ultralytics/yolov5", "custom",
+    model = torch.hub.load("ultralytics/yolov5", "custom",
                            path=f"{PATH}Yolo/yolov5/trained_models/best_new_classes.pt",
                            force_reload=False)
 
