@@ -29,12 +29,14 @@ contDetection = True
 devMode = False
 tensorrt = False
 
+PATH = "/media/jetson/KINGSTON/cantinaSelfCheckout/"
+
 print("Starting GUI.py")
 print("loading model")
 if loadModel:
     #if tensorrt:
     #    from models.common import DetectMultiBackend
-    #    tensor_rt_engine_path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov8/yolov8.engine"
+    #    tensor_rt_engine_path = PATH + "Yolo/yolov8/yolov8.engine"
 #
  #       device = torch.device(0)
   #      model = DetectMultiBackend(tensor_rt_engine_path, device=device,
@@ -44,8 +46,8 @@ if loadModel:
       #                         )
        # model.eval()
         #model.cuda() 
-    model = torch.hub.load("ultralytics/yolov5", "custom",
-                           path="/media/jetson/KINGSTON/cantinaSelfCheckout/Yolo/yolov5/trained_models/best_new_classes.pt",
+    model = torch.hub.load(f"{PATH}ultralytics/yolov5", "custom",
+                           path=f"{PATH}Yolo/yolov5/trained_models/best_new_classes.pt",
                            force_reload=False)
 
     print("done loading model")
@@ -107,7 +109,7 @@ class Gui:
         self.start_detecting = True
 
         if devMode:
-            self.path = "/media/jetson/KINGSTON/cantinaSelfCheckout/Trainingsbilder/newMeal"
+            self.path = f"{PATH}Trainingsbilder/newMeal"
             btn_pics = tk.Button(master=self.frame_base, text='Choose directory', width=12, height=1, font=font_buttons, bg=custom_orange,
                             activebackground=custom_orange_pressed, borderwidth=0, command=self.choose_directory)
             btn_pics.place(relx=0.97, rely=0.02, anchor=tk.NE)
