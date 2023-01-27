@@ -3,13 +3,8 @@
 Common modules
 """
 
-import ast
-import contextlib
-import json
 import math
-import platform
 import warnings
-import zipfile
 from collections import OrderedDict, namedtuple
 from copy import copy
 from pathlib import Path
@@ -27,7 +22,7 @@ from torch.cuda import amp
 
 from utils import TryExcept
 from utils.dataloaders import exif_transpose, letterbox
-from utils.general import (LOGGER, ROOT, Profile, check_requirements, check_suffix, check_version, colorstr,
+from utils.general import (LOGGER, ROOT, Profile, check_suffix, check_version, colorstr,
                            increment_path, is_notebook, make_divisible, non_max_suppression, scale_boxes, xywh2xyxy,
                            xyxy2xywh, yaml_load)
 from utils.plots import Annotator, colors, save_one_box
@@ -602,7 +597,7 @@ class DetectMultiBackend(nn.Module):
     def _model_type(p='path/to/model.pt'):
         # Return model type from model path, i.e. path='path/to/model.onnx' -> type=onnx
         # types = [pt, jit, onnx, xml, engine, coreml, saved_model, pb, tflite, edgetpu, tfjs, paddle]
-        from export import export_formats
+        from Yolo.yolov5.export import export_formats
         from utils.downloads import is_url
         sf = list(export_formats().Suffix)  # export suffixes
         if not is_url(p, check=False):

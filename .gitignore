@@ -4,3 +4,7 @@ Fotos
 segmentation_experiments.ipynb
 *.ipynb
 *.pyc
+Fisheye_Calibration
+Präsentationen
+Transfer_learning_CNNs
+utils
