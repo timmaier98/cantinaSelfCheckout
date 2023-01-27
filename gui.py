@@ -29,23 +29,23 @@ contDetection = True
 devMode = False
 tensorrt = False
 
-PATH = "/media/jetson/KINGSTON/cantinaSelfCheckout/"
+PATH = "/home/jetson/cantinaSelfCheckout/"
 
 print("Starting GUI.py")
 print("loading model")
 if loadModel:
-    #if tensorrt:
-    #    from models.common import DetectMultiBackend
-    #    tensor_rt_engine_path = PATH + "Yolo/yolov8/yolov8.engine"
-#
- #       device = torch.device(0)
-  #      model = DetectMultiBackend(tensor_rt_engine_path, device=device,
-   #                            # dnn=dnn,
-    #                           # data=data,
-     #                          fp16=True
-      #                         )
-       # model.eval()
-        #model.cuda() 
+  # if tensorrt:
+  #      from models.common import DetectMultiBackend
+  #      tensor_rt_engine_path = PATH + "Yolo/yolov8/yolov8.engine"
+  #
+  #       device = torch.device(0)
+  #       model = DetectMultiBackend(tensor_rt_engine_path, device=device,
+  #                              # dnn=dnn,
+  #                               # data=data,
+  #                               fp16=True
+  #                              )
+  #     model.eval()
+  #     model.cuda()
     model = torch.hub.load(f"{PATH}ultralytics/yolov5", "custom",
                            path=f"{PATH}Yolo/yolov5/trained_models/best_new_classes.pt",
                            force_reload=False)
