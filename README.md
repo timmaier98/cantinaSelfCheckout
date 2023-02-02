@@ -2,15 +2,17 @@
 
 At peak time the mensa at our university is very crowded. We want to solve this Problem.
 
-The goal of the project is to create a self-checkout system for a cantina.\
-You have to slide your tablet with the food under a camera. The system detects the food
+The goal of the project is to create a self-checkout system for a canteen.\
+You have to slide your serving-tray with the meals under a camera. The system detects the food
 using a neural network and automatically calculates the cost of everything on the tablet.
 
+Main entrance of the program is gui.py. On the Jetson you can click the logo on the desktop center to start the program.
 
-# Setup
+# Hardware Setup
 
 - Jetson Nano
-- Camera with mounting 
+- Camera with mounting
+
 
 
 # Users 
