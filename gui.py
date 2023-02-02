@@ -5,11 +5,11 @@ from tkinter import filedialog
 
 from PIL import Image, ImageTk
 import cv2
-import FPS as FPS
+from src import FPS as FPS
 import torch
-from prices import prices
+from src.prices import prices
 import pandas as pd
-from colors import *
+from src.colors import *
 
 # Defines width  and height of the camera image
 width = 1280
