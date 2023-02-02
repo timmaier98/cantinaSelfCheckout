@@ -75,8 +75,8 @@ The following steps were performed:
 - Confusion matrix
 
 
-<img src="gui_images/confusion_matrix.jpg" width="282"/>
-<img src="gui_images/F1_overconfidence.jpg" width="250"/>
+<img align="left" src="gui_images/confusion_matrix.jpg" width="282"/>
+<img align="center" src="gui_images/F1_overconfidence.jpg" width="250"/>  
 
 
 ### Success Criteria:
