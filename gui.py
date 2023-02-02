@@ -11,7 +11,6 @@ from prices import prices
 import pandas as pd
 from colors import *
 
-
 # Defines width  and height of the camera image
 width = 1280
 height = 720
@@ -24,14 +23,12 @@ tensorrt = False
 
 PATH = "/home/jetson/cantinaSelfCheckout/"
 
-print("loading model")
+print("loading model...")
 if loadModel:
     model = torch.hub.load("ultralytics/yolov5", "custom",
                            path=f"{PATH}Yolo/yolov5/trained_models/best_new_classes.pt",
                            force_reload=False)
-
     print("done loading model")
-
 
 
 def gstreamer_pipeline(sensor_id=0, capture_width=width, capture_height=height, display_width=width, display_height=height,

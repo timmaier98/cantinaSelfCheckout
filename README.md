@@ -1,38 +1,33 @@
-# cantinaSelfCheckout
+# Cantina Self Checkout
 
-At peak time the mensa at our university is very crowded. We want to solve this Problem.
+<img align = "center" src="gui_images/logo_final.PNG" width="500"/>
+
+At peak times, the mensa at our university is very crowded. We want to solve this Problem.
 
 The goal of the project is to create a self-checkout system for a canteen.\
-You have to slide your serving-tray with the meals under a camera. The system detects the food
-using a neural network and automatically calculates the cost of everything on the tablet.
+You have to slide your food tray with the meals under a camera. The system detects the food
+using a neural network and automatically calculates the cost of everything on the tray.
 
-Main entrance of the program is gui.py. On the Jetson you can click the logo on the desktop center to start the program.
+The program is started with gui.py. On the Jetson you can click the logo on the desktop center to start the program.
 
 # Hardware Setup
 
+<img align = "center" src="gui_images/prototype.png" width="600"/>
+
+
 - Jetson Nano
-- Camera with mounting
-
-
-
-# Users 
-
-- Students 
-- Mensa staff
-
-
-# Interfaces
-
-- cantina checkout system
-
+- CSI Camera with mounting
+- robust prototype out of aluminum profiles
 
 # Objects to detect
 
-- Water Bottles / Beer
-- Snacks "KitKat" "Knoppers" "Skittles"
-- Some main dishes
-- some side dishes (fries, pasta, rice, carrots)
-- desserts
+- Drinks
+- Snacks
+- Main dishes
+- Side dishes 
+- Desserts
+
+A full list of all objects can be found in the file ['classes.txt'](classes.txt).
 
 # Advantages
 
@@ -40,35 +35,49 @@ Main entrance of the program is gui.py. On the Jetson you can click the logo on 
 
 - faster, because all cashier checkouts can be open all the time
 - cost savings through lower staff costs, which can even be forwarded to students
-- 
 
-### Advantages for the cantina
+### Advantages for the canteen
 
 - cost savings
-- relocation of staff capacities 
-
+- relocation of staff capacities
+- scalability
 
 # Data Science Aspects
 
-### Available Data
-- there are some open datasets available online e.g. [1](https://www.kaggle.com/datasets/l33tc0d3r/indian-food-classification?resource=download), [2](https://www.kaggle.com/datasets/kmader/food41)
-
 ### Data Acquisition:
+- collection of over 2000 images of different food
+- different sources (smartphone camera, calibrated CSI camera, non-calibrated CSI camera)
 
 ### Target Variables
 - Classes of different food
+- Bounding boxes of food
 
 ### Input Features
-- Images of food on tablet
+- Images of food on food tray (from a top view)
 
-### Methodology:
-Classification
 
 ### Models:
+- YOLOv5
+- YOLOv8
 
 ### Data Preparation:
+We used Roboflow for dataset management.\
+The following steps were performed:
+- data normalization (rescale to 640x640)
+- Data labeling (bounding boxes)
+- Data augmentation (to get better accuracy)
+- Data cleaning
+- 
 
 ### Evaluation:
+- mAP (mean average precision)
+- F1 score over confidence
+- Confusion matrix
+
+
+<img src="gui_images/confusion_matrix.jpg" width="282"/>
+<img src="gui_images/F1_overconfidence.jpg" width="250"/>
+
 
 ### Success Criteria:
 

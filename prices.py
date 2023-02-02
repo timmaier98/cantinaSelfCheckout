@@ -1,4 +1,3 @@
-
 prices = {
 "Backfisch": 2.50,
 "Bier": 1.50,
