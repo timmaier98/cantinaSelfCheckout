@@ -100,7 +100,7 @@ class Gui:
             dir_text_box = tk.Label(master=self.frame_base, textvariable=self.dirVar, font=("Calibri", 10), bg=syscolor, foreground="white", width=25)
             dir_text_box.place(relx=0.97, rely=0.1, anchor=tk.NE)
         else: # if devMode is false, the GUI will show the logo
-            logo_img = Image.open("./gui_images/logo_final_weiss.png")
+            logo_img = Image.open("images/logo_final_weiss.png")
             logo_img = logo_img.resize((int(180), 180)) 
             photo_logo = ImageTk.PhotoImage(logo_img)
             logo_label = tk.Label(master=self.frame_base, image=photo_logo, bg=syscolor)
@@ -110,13 +110,13 @@ class Gui:
         self.btn_pics = tk.Button(master=self.frame_base, text='Choose manually', width=12, height=1, font=font_buttons, bg=custom_orange,
                             activebackground=custom_orange_pressed, borderwidth=0, command=self.close)
 
-        confirm_img = Image.open("./gui_images/confirmImage.png")
+        confirm_img = Image.open("images/confirmImage.png")
         confirm_img = confirm_img.resize((100, 100))
         photo_confirm_button = ImageTk.PhotoImage(confirm_img)
         confirm_button = tk.Button(master=self.frame_base, image=photo_confirm_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0, command=self.confirm_button_pressed)
         confirm_button.place(relx=0.99, rely=0.99, anchor=tk.SE)
 
-        repeat_img = Image.open("./gui_images/repeat.png")
+        repeat_img = Image.open("images/repeat.png")
         repeat_img = repeat_img.resize((105, 105))
         photo_repeat_button = ImageTk.PhotoImage(repeat_img)
         repeat_button = tk.Button(master=self.frame_base, image=photo_repeat_button, bg=syscolor, bd=0, activebackground=syscolor, highlightthickness=0, command=self.repeat_button_pressed)

@@ -1,6 +1,6 @@
 # Cantina Self Checkout
 
-<img align = "center" src="gui_images/logo_final.PNG" width="500"/>
+<img align = "center" src="images/logo_final.PNG" width="500"/>
 
 At peak times, the mensa at our university is very crowded. We want to solve this Problem.
 
@@ -8,11 +8,11 @@ The goal of the project is to create a self-checkout system for a canteen.\
 You have to slide your food tray with the meals under a camera. The system detects the food
 using a neural network and automatically calculates the cost of everything on the tray.
 
-The program is started with gui.py. On the Jetson you can click the logo on the desktop center to start the program.
+The program is started with main.py. On the Jetson you can click the logo on the desktop center to start the program.
 
 # Hardware Setup
 
-<img align = "center" src="gui_images/prototype.png" width="600"/>
+<img align = "center" src="images/prototype.png" width="600"/>
 
 
 - Jetson Nano
@@ -57,8 +57,8 @@ A full list of all objects can be found in the file ['classes.txt'](classes.txt)
 
 
 ### Models:
-- YOLOv5
-- YOLOv8
+- [YOLOv5](https://github.com/ultralytics/yolov5)
+- [YOLOv8](https://github.com/ultralytics/ultralytics)
 
 ### Data Preparation:
 We used Roboflow for dataset management.\
@@ -75,5 +75,5 @@ The following steps were performed:
 - Confusion matrix
 
 
-<img align="left" src="gui_images/confusion_matrix.jpg" width="282"/>
-<img align="center" src="gui_images/F1_overconfidence.jpg" width="250"/>
+<img align="left" src="images/confusion_matrix.jpg" width="282"/>
+<img align="center" src="images/F1_overconfidence.jpg" width="250"/>
